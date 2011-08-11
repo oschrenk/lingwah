@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lingwah
+Bundle-SymbolicName: com.googlecode.lingwah
+Bundle-Version: 1.0.0.beta1
+Bundle-Vendor: ted stockwell
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.googlecode.lingwah,
+ com.googlecode.lingwah.annotations,
+ com.googlecode.lingwah.exception,
+ com.googlecode.lingwah.grammars,
+ com.googlecode.lingwah.matcher,
+ com.googlecode.lingwah.matcher.common,
+ com.googlecode.lingwah.node,
+ com.googlecode.lingwah.util
