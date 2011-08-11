@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test
+Bundle-SymbolicName: com.googlecode.lingwah.test
+Bundle-Version: 1.0.0
+Bundle-Vendor: ted stockwell
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: com.googlecode.lingwah;bundle-version="1.0.0",
+ org.junit;bundle-version="4.8.2"
+Export-Package: com.googlecode.lingwah.test
