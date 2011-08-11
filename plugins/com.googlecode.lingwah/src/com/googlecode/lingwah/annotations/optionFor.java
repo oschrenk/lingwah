@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The given matcher is an option for the named choice matcher
+ * The given parser is an option for the named choice parser
  * @author ted stockwell
  */
 @MatcherDefinition

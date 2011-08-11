@@ -10,16 +10,16 @@ import java.util.List;
 import com.googlecode.lingwah.node.Match;
 
 /**
- * Encapsulates (and potentially manipulates) the results of applying a matcher
+ * Encapsulates (and potentially manipulates) the results of applying a parser
  * to a particular position of an input stream.
- * The MatchContext class caches instances of this class so that no matcher is 
+ * The ParseContext class caches instances of this class so that no parser is 
  * ever applied more than once to the same input position.
  * 
- * @See MatchContext
+ * @See ParseContext
  * 
  * @author ted stockwell
  */
-public class MatchResults {
+public class ParseResults {
 	
 
 	/**
@@ -27,57 +27,57 @@ public class MatchResults {
 	 */
 	static public interface Listener {
 		
-		public void onMatchFound(MatchResults results, Match node);
+		public void onMatchFound(ParseResults results, Match node);
 
-		public void onMatchError(MatchResults matchResults, MatchError error);
+		public void onMatchError(ParseResults parseResults, ParseError error);
 		
 	}
 	
 	// forwards results to the given destination results.
 	static public class DefaultListener implements Listener {
 		
-		final public MatchResults destinationResults;
+		final public ParseResults destinationResults;
 		
-		public DefaultListener(MatchResults results) {
+		public DefaultListener(ParseResults results) {
 			destinationResults= results;
 		}
 		
-		public void onMatchFound(MatchResults results, Match node) {
+		public void onMatchFound(ParseResults results, Match node) {
 			destinationResults.addMatch(node);
 		}
 
-		public void onMatchError(MatchResults matchResults, MatchError error) {
+		public void onMatchError(ParseResults parseResults, ParseError error) {
 			destinationResults.setError(error);
 		}
 	}
 	
 
-	private final MatchContext _ctx;
-	private final Matcher _matcher;
+	private final ParseContext _ctx;
+	private final Parser _matcher;
 	private final int _position; 
 	private List<Match> _matches;
-	private MatchError _error;
+	private ParseError _error;
 	private HashSet<Listener> _listeners= new HashSet<Listener>();
-	private HashMap<Matcher, Object> _properties= new HashMap<Matcher, Object>();
+	private HashMap<Parser, Object> _properties= new HashMap<Parser, Object>();
 
-	public MatchResults(MatchContext ctx, Matcher matcher, int position) {
+	public ParseResults(ParseContext ctx, Parser parser, int position) {
 		_ctx= ctx;
-		_matcher= matcher;
+		_matcher= parser;
 		_position= position;
 	}
 	
 	
 	
-	public MatchResults setError(String msg) {
-		setError(new MatchError(_matcher, msg, _position));
+	public ParseResults setError(String msg) {
+		setError(new ParseError(_matcher, msg, _position));
 		return this;
 	}
-	public MatchResults setError(String msg, int position) {
-		setError(new MatchError(_matcher, msg, position));
+	public ParseResults setError(String msg, int position) {
+		setError(new ParseError(_matcher, msg, position));
 		return this;
 	}
 	
-	public MatchResults addMatch(int endPosition) {
+	public ParseResults addMatch(int endPosition) {
 		addMatch(Match.create(_ctx, _matcher, _position, endPosition));
 		return this;
 	}
@@ -117,7 +117,7 @@ public class MatchResults {
 
 
 
-	public Matcher getMatcher() {
+	public Parser getMatcher() {
 		return _matcher;
 	}
 
@@ -154,7 +154,7 @@ public class MatchResults {
 			}
 		}
 	}
-	public void setError(MatchError error) {
+	public void setError(ParseError error) {
 		// just save the error.
 		// if no matches are found then the error will be send to listeners
 		if (_error == null || error.position < _error.position)
@@ -164,21 +164,21 @@ public class MatchResults {
 		}
 	}
 	
-	public MatchError getError() {
+	public ParseError getError() {
 		return _error;
 	}
 	
-	public MatchContext getContext() { return _ctx; }
+	public ParseContext getContext() { return _ctx; }
 	
 	@SuppressWarnings("unchecked")
-	public <T> T getMatcherInfo(Matcher matcher) {
-		return (T) _properties.get(matcher);
+	public <T> T getMatcherInfo(Parser parser) {
+		return (T) _properties.get(parser);
 	}
 	public <T> T getMatcherInfo() {
 		return getMatcherInfo(getMatcher());
 	}
-	public <T> void putMatcherInfo(Matcher matcher, T info) {
-		_properties.put(matcher, info);
+	public <T> void putMatcherInfo(Parser parser, T info) {
+		_properties.put(parser, info);
 	}
 	public <T> void putMatcherInfo(T info) {
 		_properties.put(getMatcher(), info);

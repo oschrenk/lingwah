@@ -1,17 +1,17 @@
 /**
  * 
  */
-package com.googlecode.lingwah.matcher;
+package com.googlecode.lingwah.parser;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
 
-public final class StringMatcher extends TerminalMatcher
+public final class StringParser extends TerminalParser
 {
 	private final String _target;
 
-	public StringMatcher(String target)
+	public StringParser(String target)
 	{
 		_target= target;
 	}
@@ -26,7 +26,7 @@ public final class StringMatcher extends TerminalMatcher
 	}
 
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults matchResults) {
+	public void startMatching(ParseContext ctx, int start, ParseResults parseResults) {
 		String input= ctx.getInput();
 		int i= 0;
 		int l= _target.length();
@@ -34,14 +34,14 @@ public final class StringMatcher extends TerminalMatcher
 		while (i < l && (start+i) < e && input.charAt(start + i) == _target.charAt(i))
 			i++;
 		if (i == l) { 
-			matchResults.addMatch(start + l);
+			parseResults.addMatch(start + l);
 		}
 		else
-			matchResults.setError("Expected '"+_target+"'", start + i);
+			parseResults.setError("Expected '"+_target+"'", start + i);
 	}
 
 	@Override
-	public void completeMatching(MatchContext ctx, int start, MatchResults matchResults) {
+	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
 		// nothign to do
 		
 	}

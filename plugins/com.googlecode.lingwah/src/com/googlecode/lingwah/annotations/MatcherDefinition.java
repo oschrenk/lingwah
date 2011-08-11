@@ -1,7 +1,7 @@
 package com.googlecode.lingwah.annotations;
 
 /**
- * A market that identifiers matcher annotations
+ * A market that identifiers parser annotations
  * @author ted stockwell
  *
  */

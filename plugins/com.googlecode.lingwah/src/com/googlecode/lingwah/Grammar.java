@@ -3,113 +3,113 @@ package com.googlecode.lingwah;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-import com.googlecode.lingwah.matcher.ChoiceMatcher;
-import com.googlecode.lingwah.matcher.FirstMatcher;
-import com.googlecode.lingwah.matcher.MutableMatcher;
-import com.googlecode.lingwah.matcher.StringMatcher;
+import com.googlecode.lingwah.parser.ChoiceParser;
+import com.googlecode.lingwah.parser.FirstParser;
+import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.StringParser;
 
 public class Grammar {
 	
 	protected Grammar() { 
 	}
 	
-	final protected MutableMatcher define(final Matcher matcher)
+	final protected MutableParser define(final Parser parser)
 	{
-		return Parsers.define(matcher);
+		return Parsers.define(parser);
 	}
 	
-	protected StringMatcher string(final String string)
+	protected StringParser string(final String string)
 	{
 		return Parsers.string(string);
 	}
-	final protected StringMatcher str(final String string)
+	final protected StringParser str(final String string)
 	{
 		return string(string);
 	}
-	protected StringMatcher string(final char c)
+	protected StringParser string(final char c)
 	{
 		return Parsers.string(c);
 	}
-	final protected StringMatcher str(final char c)
+	final protected StringParser str(final char c)
 	{
 		return string(c);
 	}
 
-	protected Matcher range(final char from, final char to)
+	protected Parser range(final char from, final char to)
 	{
 		return Parsers.range(from, to);
 	}
 
-	protected Matcher sequence(final Matcher... matchers)
+	protected Parser sequence(final Parser... matchers)
 	{
 		return Parsers.sequence(matchers);
 	}
-	final protected Matcher seq(final Matcher... matchers)
+	final protected Parser seq(final Parser... matchers)
 	{
 		return sequence(matchers);
 	}
 
-	protected ChoiceMatcher choice(final Matcher... matchers)
+	protected ChoiceParser choice(final Parser... matchers)
 	{
 		return Parsers.cho(matchers);
 	}
-	final protected ChoiceMatcher cho(final Matcher... matchers)
+	final protected ChoiceParser cho(final Parser... matchers)
 	{
 		return cho(matchers);
 	}
 	
-	protected Matcher anyChar()
+	protected Parser anyChar()
 	{
 		return Parsers.anyChar();
 	}
 	
-	protected FirstMatcher first(final Matcher... matchers)
+	protected FirstParser first(final Parser... matchers)
 	{
 		return Parsers.first(matchers);
 	}
 	
-	protected Matcher excluding(final Matcher matcher, final Matcher... filters)
+	protected Parser excluding(final Parser parser, final Parser... filters)
 	{
-		return Parsers.excluding(matcher, filters);
+		return Parsers.excluding(parser, filters);
 	}
-	final protected Matcher exc(final Matcher matcher, final Matcher... filters)
+	final protected Parser exc(final Parser parser, final Parser... filters)
 	{
-		return excluding(matcher, filters);
+		return excluding(parser, filters);
 	}
 
-	protected Matcher repeat(final Matcher matcher)
+	protected Parser repeat(final Parser parser)
 	{
-		return Parsers.repeat(matcher);
+		return Parsers.repeat(parser);
 	}
-	final protected Matcher rep(final Matcher matcher)
+	final protected Parser rep(final Parser parser)
 	{
-		return repeat(matcher);
+		return repeat(parser);
 	}
-	final protected Matcher oneOrMore(final Matcher matcher)
+	final protected Parser oneOrMore(final Parser parser)
 	{
-		return Parsers.oneOrMore(matcher);
+		return Parsers.oneOrMore(parser);
 	}
-	final protected Matcher zeroOrMore(final Matcher matcher)
+	final protected Parser zeroOrMore(final Parser parser)
 	{
-		return Parsers.zeroOrMore(matcher);
+		return Parsers.zeroOrMore(parser);
 	}
 
 	// ============================================================================================
 	// === OPTIONAL MATCHERS
 	// ============================================================================================
 
-	protected Matcher optional(final Matcher matcher)
+	protected Parser optional(final Parser parser)
 	{
-		return Parsers.optional(matcher);
+		return Parsers.optional(parser);
 	}
-	final protected Matcher opt(final Matcher matcher)
+	final protected Parser opt(final Parser parser)
 	{
-		return optional(matcher);
+		return optional(parser);
 	}
 
-	protected <T> Matcher[] tail(final Matcher[] array)
+	protected <T> Parser[] tail(final Parser[] array)
 	{
-		return Arrays.asList(array).subList(1, array.length).toArray(new Matcher[] {});
+		return Arrays.asList(array).subList(1, array.length).toArray(new Parser[] {});
 	}
 	
 	
@@ -121,18 +121,18 @@ public class Grammar {
 		Class<? extends Grammar> grammarClass= getClass();
 		Field[] fields= grammarClass.getFields();
 		for (Field field:fields) {
-			if (!Matcher.class.isAssignableFrom(field.getType()))
+			if (!Parser.class.isAssignableFrom(field.getType()))
 				continue;
 			field.setAccessible(true);
-			Matcher matcher= null;
+			Parser parser= null;
 			try { 
-				matcher= (Matcher)field.get(this);
+				parser= (Parser)field.get(this);
 			}
 			catch (Exception x) {
 				x.printStackTrace();
 				continue;
 			}
-			matcher.setLabel(field.getName());
+			parser.setLabel(field.getName());
 		}
 		
 	}

@@ -1,6 +1,6 @@
 package com.googlecode.lingwah;
 
-public class MatchError {
+public class ParseError {
 	/**
 	 * A message that describes the parsing failure.
 	 */
@@ -12,19 +12,19 @@ public class MatchError {
 	public final int position;
 	
 	/**
-	 * The matcher that created this error
+	 * The parser that created this error
 	 */
-	public final Matcher matcher;
+	public final Parser parser;
 	
-	public MatchError(Matcher matcher, String msg, int position) {
-		this.matcher= matcher;
+	public ParseError(Parser parser, String msg, int position) {
+		this.parser= parser;
 		this.errorMsg= msg;
 		this.position= position;
 	}
 	
 	@Override
 	public String toString() {
-		return "{matcher:"+matcher+"position:"+position+",message:"+errorMsg+"}";
+		return "{parser:"+parser+"position:"+position+",message:"+errorMsg+"}";
 	}
 
 }

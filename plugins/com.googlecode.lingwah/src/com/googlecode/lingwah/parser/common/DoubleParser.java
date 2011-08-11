@@ -1,42 +1,42 @@
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchError;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.MatchResults.Listener;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseError;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.ParseResults.Listener;
 import com.googlecode.lingwah.node.Match;
+import com.googlecode.lingwah.parser.TerminalParser;
 
-public class DoubleMatcher
-extends TerminalMatcher
+public class DoubleParser
+extends TerminalParser
 {
-	static final private IntegerMatcher __integerMatcher= new IntegerMatcher();
+	static final private IntegerParser __integerMatcher= new IntegerParser();
 	//decimal ::= ([sign] ((digits "." {digits}) | ("." digits) | digits)) 
 	@Override
-	public void startMatching(final MatchContext ctx, final int start, final MatchResults targetResults)
+	public void startMatching(final ParseContext ctx, final int start, final ParseResults targetResults)
 	{
 		final String input= ctx.getInput();
 		ctx.doMatch(__integerMatcher, start).addListener( new Listener() {
 			Match _match;
 			@Override
-			public void onMatchFound(MatchResults integerResults, Match node) {
+			public void onMatchFound(ParseResults integerResults, Match node) {
 				_match= node;
 			}
 			
 			@Override
-			public void onMatchError(MatchResults integerResults, MatchError matchError) {
+			public void onMatchError(ParseResults integerResults, ParseError parseError) {
 				if (_match == null) {
 					if ('.' == input.charAt(start))
 					{
 						ctx.doMatch(__integerMatcher, start+1).addListener(new Listener() {
 							Match _fraction;
 							@Override
-							public void onMatchFound(MatchResults integerResults, Match node) {
+							public void onMatchFound(ParseResults integerResults, Match node) {
 								_fraction= node;
 							}
 							@Override
-							public void onMatchError(MatchResults integerResults, MatchError matchError) {
+							public void onMatchError(ParseResults integerResults, ParseError parseError) {
 								if (_fraction == null) {
 									targetResults.setError("Expected a double");
 									return;
@@ -54,11 +54,11 @@ extends TerminalMatcher
 						ctx.doMatch(__integerMatcher, _match.getEnd()+1).addListener(new Listener() {
 							Match _fraction;
 							@Override
-							public void onMatchFound(MatchResults integerResults, Match node) {
+							public void onMatchFound(ParseResults integerResults, Match node) {
 								_fraction= node;
 							}
 							@Override
-							public void onMatchError(MatchResults integerResults, MatchError matchError) {
+							public void onMatchError(ParseResults integerResults, ParseError parseError) {
 								int end= _match.getEnd()+1;
 								if (_fraction != null)
 									end= _fraction.getEnd();

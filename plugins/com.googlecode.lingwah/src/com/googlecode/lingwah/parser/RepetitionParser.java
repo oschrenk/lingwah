@@ -1,31 +1,31 @@
 /**
  * 
  */
-package com.googlecode.lingwah.matcher;
+package com.googlecode.lingwah.parser;
 
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchError;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.Matcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseError;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.node.Match;
 
 /**
- * Returns a result for each repetition of the given matcher. 
+ * Returns a result for each repetition of the given parser. 
  * @author Ted Stockwell
  *
  */
-public final class RepetitionMatcher extends Matcher
+public final class RepetitionParser extends Parser
 {
-	private final Matcher _matcher;
+	private final Parser _matcher;
 
-	public RepetitionMatcher(Matcher matcher)
+	public RepetitionParser(Parser parser)
 	{
-		_matcher= matcher;
+		_matcher= parser;
 	}
 	
 	@Override
@@ -34,15 +34,15 @@ public final class RepetitionMatcher extends Matcher
 	}
 
 	@Override
-	public void startMatching(final MatchContext ctx, int start, final MatchResults targetResults) {
+	public void startMatching(final ParseContext ctx, int start, final ParseResults targetResults) {
 		
-		class RepetitionListener implements MatchResults.Listener {
+		class RepetitionListener implements ParseResults.Listener {
 			private Match _previousMatch;
 			RepetitionListener(Match previousMatch) {
 				_previousMatch= previousMatch;
 			}
 			@Override
-			public void onMatchFound(MatchResults results, final Match nextNode) {
+			public void onMatchFound(ParseResults results, final Match nextNode) {
 				ArrayList<Match> children= new ArrayList<Match>();
 				if (_previousMatch != null)
 					children.addAll(_previousMatch.getChildren());
@@ -53,9 +53,9 @@ public final class RepetitionMatcher extends Matcher
 			}
 
 			@Override
-			public void onMatchError(MatchResults results, MatchError matchError) {
+			public void onMatchError(ParseResults results, ParseError parseError) {
 				if (_previousMatch == null) {
-					targetResults.setError(matchError);
+					targetResults.setError(parseError);
 				}
 			}
 		};
@@ -64,13 +64,13 @@ public final class RepetitionMatcher extends Matcher
 	}
 
 	@Override
-	public void completeMatching(MatchContext ctx, int start, MatchResults matchResults) {
+	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
 		// nothing to do
 		
 	}
 	
 	@Override
-	public List<Matcher> getDependencies() {
-		return Arrays.asList(new Matcher[] { _matcher });
+	public List<Parser> getDependencies() {
+		return Arrays.asList(new Parser[] { _matcher });
 	}
 }

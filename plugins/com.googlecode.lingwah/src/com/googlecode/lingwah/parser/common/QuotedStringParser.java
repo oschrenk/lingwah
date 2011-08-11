@@ -1,20 +1,20 @@
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.parser.TerminalParser;
 
 /**
  * Matches both single quoted or double quoted strings
  * 
  * @author Ted Stockwell
  */
-public class QuotedStringMatcher
-extends TerminalMatcher
+public class QuotedStringParser
+extends TerminalParser
 {
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults results)
+	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
 		final String input= ctx.getInput();
 		if (input.length() <= start) { 

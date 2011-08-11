@@ -1,26 +1,26 @@
 /**
  * 
  */
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.parser.TerminalParser;
 
-public final class RangeMatcher extends TerminalMatcher
+public final class RangeParser extends TerminalParser
 {
 	private final char to;
 	private final char from;
 
-	public RangeMatcher(char to, char from)
+	public RangeParser(char to, char from)
 	{
 		this.to = to;
 		this.from = from;
 	}
 
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults results)
+	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
 		String input= ctx.getInput();
 		if (start < input.length()) 

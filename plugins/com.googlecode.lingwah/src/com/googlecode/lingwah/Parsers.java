@@ -1,16 +1,16 @@
 package com.googlecode.lingwah;
 
 
-import com.googlecode.lingwah.matcher.ChoiceMatcher;
-import com.googlecode.lingwah.matcher.ExcludingMatcher;
-import com.googlecode.lingwah.matcher.FirstMatcher;
-import com.googlecode.lingwah.matcher.MutableMatcher;
-import com.googlecode.lingwah.matcher.OptionalMatcher;
-import com.googlecode.lingwah.matcher.RepetitionMatcher;
-import com.googlecode.lingwah.matcher.SequenceMatcher;
-import com.googlecode.lingwah.matcher.StringMatcher;
-import com.googlecode.lingwah.matcher.common.AnyStringMatcher;
-import com.googlecode.lingwah.matcher.common.RangeMatcher;
+import com.googlecode.lingwah.parser.ChoiceParser;
+import com.googlecode.lingwah.parser.ExcludingParser;
+import com.googlecode.lingwah.parser.FirstParser;
+import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.OptionalParser;
+import com.googlecode.lingwah.parser.RepetitionParser;
+import com.googlecode.lingwah.parser.SequenceParser;
+import com.googlecode.lingwah.parser.StringParser;
+import com.googlecode.lingwah.parser.common.AnyStringParser;
+import com.googlecode.lingwah.parser.common.RangeParser;
 
 public final class Parsers
 {
@@ -21,81 +21,81 @@ public final class Parsers
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	public static StringMatcher string(final String string)
+	public static StringParser string(final String string)
 	{
-		return new StringMatcher(string);
+		return new StringParser(string);
 	}
-	public static final StringMatcher str(final String string)
+	public static final StringParser str(final String string)
 	{
 		return string(string);
 	}
-	public static final StringMatcher string(final char c)
+	public static final StringParser string(final char c)
 	{
 		return string(""+c);
 	}
-	public static final StringMatcher str(final char c)
+	public static final StringParser str(final char c)
 	{
 		return string(""+c);
 	}
 
-	public static Matcher range(final char from, final char to)
+	public static Parser range(final char from, final char to)
 	{
-		return new RangeMatcher(to, from);
+		return new RangeParser(to, from);
 	}
 
-	public static Matcher sequence(final Matcher... matchers)
+	public static Parser sequence(final Parser... matchers)
 	{
-		return new SequenceMatcher(matchers);
+		return new SequenceParser(matchers);
 	}
-	public static final Matcher seq(final Matcher... matchers)
+	public static final Parser seq(final Parser... matchers)
 	{
 		return sequence(matchers);
 	}
 
-	public static ChoiceMatcher choice(final Matcher... matchers)
+	public static ChoiceParser choice(final Parser... matchers)
 	{
-		return new ChoiceMatcher(matchers);
+		return new ChoiceParser(matchers);
 	}
-	public static final ChoiceMatcher cho(final Matcher... matchers)
+	public static final ChoiceParser cho(final Parser... matchers)
 	{
 		return choice(matchers);
 	}
 	
 	
-	public static FirstMatcher first(final Matcher... matchers)
+	public static FirstParser first(final Parser... matchers)
 	{
-		return new FirstMatcher(matchers);
+		return new FirstParser(matchers);
 	}
 	
-	public static Matcher anyChar()
+	public static Parser anyChar()
 	{
-		return new AnyStringMatcher(1);
+		return new AnyStringParser(1);
 	}
 	
-	public static Matcher excluding(final Matcher matcher, final Matcher... filters)
+	public static Parser excluding(final Parser parser, final Parser... filters)
 	{
-		return new ExcludingMatcher(matcher, filters);
+		return new ExcludingParser(parser, filters);
 	}
-	public static final Matcher exc(final Matcher matcher, final Matcher... filters)
+	public static final Parser exc(final Parser parser, final Parser... filters)
 	{
-		return excluding(matcher, filters);
+		return excluding(parser, filters);
 	}
 
-	public static Matcher repeat(final Matcher matcher)
+	public static Parser repeat(final Parser parser)
 	{
-		return new RepetitionMatcher(matcher);
+		return new RepetitionParser(parser);
 	}
-	public static final Matcher rep(final Matcher matcher)
+	public static final Parser rep(final Parser parser)
 	{
-		return repeat(matcher);
+		return repeat(parser);
 	}
-	public static final Matcher oneOrMore(final Matcher matcher)
+	public static final Parser oneOrMore(final Parser parser)
 	{
-		return repeat(matcher);
+		return repeat(parser);
 	}
-	public static final Matcher zeroOrMore(final Matcher matcher)
+	public static final Parser zeroOrMore(final Parser parser)
 	{
-		return opt(repeat(matcher));
+		return opt(repeat(parser));
 	}
 	
 
@@ -103,25 +103,25 @@ public final class Parsers
 	// === OPTIONAL MATCHERS
 	// ============================================================================================
 
-	public static Matcher optional(final Matcher matcher)
+	public static Parser optional(final Parser parser)
 	{
-		return new OptionalMatcher(matcher);
+		return new OptionalParser(parser);
 	}
-	final public static Matcher opt(final Matcher matcher)
+	final public static Parser opt(final Parser parser)
 	{
-		return optional(matcher);
+		return optional(parser);
 	}
 
-	public static <T> Matcher[] tail(final Matcher[] array)
+	public static <T> Parser[] tail(final Parser[] array)
 	{
 		if (array == null)
 			return null;
-		Matcher[] dest= new Matcher[array.length-1];
+		Parser[] dest= new Parser[array.length-1];
 		System.arraycopy(array, 1, dest, 0, dest.length);
 		return dest;
 	}
 
-	public static MutableMatcher define(Matcher matcher) {
-		return new MutableMatcher(matcher);
+	public static MutableParser define(Parser parser) {
+		return new MutableParser(parser);
 	}
 }

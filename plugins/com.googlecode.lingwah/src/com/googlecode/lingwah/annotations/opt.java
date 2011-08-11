@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The given matcher is optional (may occur or not)
+ * The given parser is optional (may occur or not)
  * @author ted stockwell
  */
 @MatcherDefinition

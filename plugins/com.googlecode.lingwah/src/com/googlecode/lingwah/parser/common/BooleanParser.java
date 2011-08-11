@@ -1,18 +1,18 @@
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.parser.TerminalParser;
 
-public class BooleanMatcher
-extends TerminalMatcher
+public class BooleanParser
+extends TerminalParser
 {
 	static final String T= "true";
 	static final String F= "false";
 	
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults results) 
+	public void startMatching(ParseContext ctx, int start, ParseResults results) 
 	{
 		String input= ctx.getInput();
 		String s= null;

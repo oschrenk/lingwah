@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The associated element matches one of the given matchers
+ * The associated element matches one of the given parsers
  * @author ted stockwell
  */
 @MatcherDefinition

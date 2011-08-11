@@ -3,20 +3,20 @@ package com.googlecode.lingwah.test;
 import java.util.HashMap;
 
 import com.googlecode.lingwah.Grammar;
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.Matcher;
-import com.googlecode.lingwah.matcher.MutableMatcher;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
-import com.googlecode.lingwah.matcher.common.BooleanMatcher;
-import com.googlecode.lingwah.matcher.common.DecimalMatcher;
-import com.googlecode.lingwah.matcher.common.DoubleMatcher;
-import com.googlecode.lingwah.matcher.common.IntegerMatcher;
-import com.googlecode.lingwah.matcher.common.NameMatcher;
-import com.googlecode.lingwah.matcher.common.QuotedStringMatcher;
-import com.googlecode.lingwah.matcher.common.SimpleBlockMatcher;
-import com.googlecode.lingwah.matcher.common.SingleLineCommentMatcher;
-import com.googlecode.lingwah.matcher.common.WhitespaceMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.Parser;
+import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.TerminalParser;
+import com.googlecode.lingwah.parser.common.BooleanParser;
+import com.googlecode.lingwah.parser.common.DecimalParser;
+import com.googlecode.lingwah.parser.common.DoubleParser;
+import com.googlecode.lingwah.parser.common.IntegerParser;
+import com.googlecode.lingwah.parser.common.NameParser;
+import com.googlecode.lingwah.parser.common.QuotedStringParser;
+import com.googlecode.lingwah.parser.common.SimpleBlockParser;
+import com.googlecode.lingwah.parser.common.SingleLineCommentParser;
+import com.googlecode.lingwah.parser.common.WhitespaceParser;
 
 /**
  * A grammar for the Meteor Description Language.
@@ -29,25 +29,25 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 	
 	static final String UTF8= "UTF-8";
 
-	public static class URIRefMatcher extends TerminalMatcher 
+	public static class URIRefMatcher extends TerminalParser 
 	{
 		@Override
-		public void startMatching(MatchContext ctx, int start, MatchResults matchResults) 
+		public void startMatching(ParseContext ctx, int start, ParseResults parseResults) 
 		{
 			final String input= ctx.getInput();
 			if (input.length() <= start || input.charAt(start) != '<') {
-				matchResults.setError("Expected '<'");
+				parseResults.setError("Expected '<'");
 				return;
 			}
 			
 			int pos = input.indexOf('>', start);
 			if (pos < 0) {
-				matchResults.setError("End of URI reference not found");
+				parseResults.setError("End of URI reference not found");
 				return;
 			}
 			
 			pos++;
-			matchResults.addMatch(pos);
+			parseResults.addMatch(pos);
 		}
 		
 		@Override
@@ -57,50 +57,50 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 		}
 	}
 	
-	static HashMap<String, Matcher> __matchersById= new HashMap<String, Matcher>(); 
+	static HashMap<String, Parser> __matchersById= new HashMap<String, Parser>(); 
 	
 	
 	
-	public final Matcher lower = range('a', 'z');
-	public final Matcher digit = range('0', '9');
-	public final Matcher singleLineComment= new SingleLineCommentMatcher("//");
-	public final Matcher multiLineComment= new SimpleBlockMatcher("/*", "*/");
-	public final Matcher ws = rep(choice(new WhitespaceMatcher(), singleLineComment, multiLineComment));
-	public final Matcher optws = opt(ws);
-	public final Matcher name= new NameMatcher();
+	public final Parser lower = range('a', 'z');
+	public final Parser digit = range('0', '9');
+	public final Parser singleLineComment= new SingleLineCommentParser("//");
+	public final Parser multiLineComment= new SimpleBlockParser("/*", "*/");
+	public final Parser ws = rep(choice(new WhitespaceParser(), singleLineComment, multiLineComment));
+	public final Parser optws = opt(ws);
+	public final Parser name= new NameParser();
 		
-	public final Matcher quotedString= new QuotedStringMatcher();
-	public final Matcher nodeID= seq(str("_:"), name);
-	public final Matcher prefixName= name;
-	public final Matcher qname= cho( seq(prefixName,str(":"),name), seq(str(":"),name), str(":"));
-	public final Matcher uriref= new URIRefMatcher();
-	public final Matcher resource= cho(name, uriref, qname);
-	public final Matcher subject= cho(resource, nodeID, str("[]"));
-	public final Matcher base= seq(str("@base"), ws, uriref);
-	public final Matcher importt= seq(str("@import"), ws, opt(seq(prefixName, str(":"), ws)), uriref);
-	public final Matcher bool= new BooleanMatcher();
-	public final Matcher decimal= new DecimalMatcher();
-	public final Matcher doubl= new DoubleMatcher();
-	public final Matcher integer= new IntegerMatcher();
-	public final Matcher datatypeString= seq(quotedString, str("^^"), resource);
-	public final Matcher language= seq(rep(lower), opt(rep(seq(str("-"), rep(seq(cho(lower, digit)))))));
-	public final Matcher literal= cho(seq(quotedString, opt(seq(str("@"), language))), datatypeString, integer, doubl, decimal, bool);
-	public final Matcher object= cho(resource, literal, nodeID, str("[]"));
-	public final Matcher objectList= seq(object, opt(rep(seq(optws, str(","), optws, object))));
-	public final Matcher verb= choice(resource, str("a"));
-	public final Matcher propertyValuePair= seq(verb, ws, objectList);
-	public final Matcher triple= seq(subject, ws, propertyValuePair, optws, str(";"));
-	public final Matcher directive= seq(cho(importt, base), optws, str(";"));
+	public final Parser quotedString= new QuotedStringParser();
+	public final Parser nodeID= seq(str("_:"), name);
+	public final Parser prefixName= name;
+	public final Parser qname= cho( seq(prefixName,str(":"),name), seq(str(":"),name), str(":"));
+	public final Parser uriref= new URIRefMatcher();
+	public final Parser resource= cho(name, uriref, qname);
+	public final Parser subject= cho(resource, nodeID, str("[]"));
+	public final Parser base= seq(str("@base"), ws, uriref);
+	public final Parser importt= seq(str("@import"), ws, opt(seq(prefixName, str(":"), ws)), uriref);
+	public final Parser bool= new BooleanParser();
+	public final Parser decimal= new DecimalParser();
+	public final Parser doubl= new DoubleParser();
+	public final Parser integer= new IntegerParser();
+	public final Parser datatypeString= seq(quotedString, str("^^"), resource);
+	public final Parser language= seq(rep(lower), opt(rep(seq(str("-"), rep(seq(cho(lower, digit)))))));
+	public final Parser literal= cho(seq(quotedString, opt(seq(str("@"), language))), datatypeString, integer, doubl, decimal, bool);
+	public final Parser object= cho(resource, literal, nodeID, str("[]"));
+	public final Parser objectList= seq(object, opt(rep(seq(optws, str(","), optws, object))));
+	public final Parser verb= choice(resource, str("a"));
+	public final Parser propertyValuePair= seq(verb, ws, objectList);
+	public final Parser triple= seq(subject, ws, propertyValuePair, optws, str(";"));
+	public final Parser directive= seq(cho(importt, base), optws, str(";"));
 		
-	public final Matcher blockType= cho( seq(resource, ws, resource), seq(str("@external"), ws, resource), resource);
-	public final MutableMatcher blockBody= define(rep(seq(propertyValuePair, optws, str(";"))));
-	public final Matcher block= seq(blockType, optws, str("{"), optws, blockBody, optws, str("}"));
+	public final Parser blockType= cho( seq(resource, ws, resource), seq(str("@external"), ws, resource), resource);
+	public final MutableParser blockBody= define(rep(seq(propertyValuePair, optws, str(";"))));
+	public final Parser block= seq(blockType, optws, str("{"), optws, blockBody, optws, str("}"));
 	{
 		blockBody.define(seq(cho(block, blockBody.getDefinition()), opt(rep(seq(optws, cho(block, blockBody.getDefinition())))))); // blocks can be nested
 	}
 		
-	public final Matcher statement= seq(cho(directive, triple, block));
-	public final Matcher document= seq(optws, rep(seq(statement, optws)));
+	public final Parser statement= seq(cho(directive, triple, block));
+	public final Parser document= seq(optws, rep(seq(statement, optws)));
 	
 	
 	private MeteorDescriptionLanguageGrammar() {

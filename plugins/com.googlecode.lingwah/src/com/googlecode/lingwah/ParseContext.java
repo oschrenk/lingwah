@@ -5,22 +5,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A MatchContext is used to invoke parse text by invoking the doMatch method 
- * and passing a Matcher.
+ * A ParseContext is used to invoke parse text by invoking the doMatch method 
+ * and passing a Parser.
  * 
- * MatchContext manages the parsing process.
- * MatchContext implements strategies for memoizing match results 
+ * ParseContext manages the parsing process.
+ * ParseContext implements strategies for memoizing match results 
  * and avoiding recursion.
  * 
- * Specificially, MatchContext avoids left recursion using the memoization 
+ * Specificially, ParseContext avoids left recursion using the memoization 
  * techniques described in the paper "Memoization in Top-Down Parsing" by
  * Mark Johnson 
  *   
  * @author ted stockwell
  *
  */
-public class MatchContext {
-	private static final long serialVersionUID = 1L;
+public class ParseContext {
 	private static String tabstring= "\t";
 	private final String tabs() {
 		if (tabstring.length() < _tabs) {
@@ -35,24 +34,24 @@ public class MatchContext {
 	
 	
 	private String _input;
-	private HashMap<Matcher, Map<Integer, MatchResults>> _cache= 
-		new HashMap<Matcher, Map<Integer,MatchResults>>();
+	private HashMap<Parser, Map<Integer, ParseResults>> _cache= 
+		new HashMap<Parser, Map<Integer,ParseResults>>();
 	
 	private boolean _trace= false;
 	private int _tabs= 0;
-	private HashMap<Matcher, Boolean> _traceFlags= new HashMap<Matcher, Boolean>();
+	private HashMap<Parser, Boolean> _traceFlags= new HashMap<Parser, Boolean>();
 	private boolean _inProgress;
-	private ArrayList<MatchResults> _callStack= new ArrayList<MatchResults>();
+	private ArrayList<ParseResults> _callStack= new ArrayList<ParseResults>();
 	
 	
 	/**
 	 * A convenience method for performing a single match.
 	 */
-	public static MatchResults match(Matcher matcher, String input) {
-		return new MatchContext(input).getMatchResults(matcher, 0);
+	public static ParseResults match(Parser parser, String input) {
+		return new ParseContext(input).getMatchResults(parser, 0);
 	}
 	
-	public MatchContext(String input) {
+	public ParseContext(String input) {
 		_input= input;
 	}
 	
@@ -60,12 +59,12 @@ public class MatchContext {
 	/**
 	 * This method is used to perform matches.
 	 */
-	public MatchResults doMatch(Matcher matcher, int start) {
-		MatchResults entry= getCachedResults(matcher, start);
+	public ParseResults doMatch(Parser parser, int start) {
+		ParseResults entry= getCachedResults(parser, start);
 		if (entry != null) 
 			return entry;
 
-		entry = new MatchResults(this, matcher, start);
+		entry = new ParseResults(this, parser, start);
 		cacheMatchResults(entry);
 		_callStack.add(entry);
 		
@@ -75,19 +74,19 @@ public class MatchContext {
 
 		while (!_callStack.isEmpty()) {
 			entry= _callStack.remove(0);
-			matcher= entry.getMatcher();
+			parser= entry.getMatcher();
 			start= entry.getPosition();
 
 			// setup trace 
 			boolean otrace= _trace;
-			Boolean traceFlag= _traceFlags.get(matcher);
+			Boolean traceFlag= _traceFlags.get(parser);
 			if (traceFlag != null) 
 				_trace= traceFlag.booleanValue();
 			boolean trace= _trace;
 			if (trace) _tabs++;
-			if (trace) System.out.println(tabs()+"doMatch("+matcher.getLabel()+","+start+")");		
+			if (trace) System.out.println(tabs()+"doMatch("+parser.getLabel()+","+start+")");		
 			try {
-				matcher.startMatching(this, start, entry);
+				parser.startMatching(this, start, entry);
 			} 
 			finally {
 				if (trace) {
@@ -108,29 +107,29 @@ public class MatchContext {
 		return _input;
 	}
 
-	public MatchResults getCachedResults(Matcher matcher, int start) {
-		MatchResults entry= null;
-		Map<Integer,MatchResults> entries= _cache.get(matcher);
+	public ParseResults getCachedResults(Parser parser, int start) {
+		ParseResults entry= null;
+		Map<Integer,ParseResults> entries= _cache.get(parser);
 		if (entries != null)
 			entry= entries.get(start);
 		return entry;
 	}
 	
-	protected void cacheMatchResults(MatchResults  matchResults) {
-		Matcher matcher= matchResults.getMatcher();
-		Map<Integer,MatchResults> results= _cache.get(matcher);
+	protected void cacheMatchResults(ParseResults  parseResults) {
+		Parser parser= parseResults.getMatcher();
+		Map<Integer,ParseResults> results= _cache.get(parser);
 		if (results == null) {
-			results= new HashMap<Integer, MatchResults>();
-			_cache.put(matcher, results);
+			results= new HashMap<Integer, ParseResults>();
+			_cache.put(parser, results);
 		}
-		int start= matchResults.getPosition();
-		MatchResults entry= results.get(start);
+		int start= parseResults.getPosition();
+		ParseResults entry= results.get(start);
 		assert entry == null : "Internal Error: Results have already been cached";
-		results.put(start, matchResults);
+		results.put(start, parseResults);
 	}
 	
-	public void trace(Matcher matcher, boolean trace) {
-		_traceFlags.put(matcher, trace ? Boolean.TRUE : Boolean.FALSE);
+	public void trace(Parser parser, boolean trace) {
+		_traceFlags.put(parser, trace ? Boolean.TRUE : Boolean.FALSE);
 	}
 
 
@@ -142,9 +141,9 @@ public class MatchContext {
 	 * Maybe non-terminals also complete during a call to doMatch but I do not 
 	 * know that for sure.  
 	 */
-	public MatchResults getMatchResults(Matcher matcher, int start) {
-		doMatch(matcher, start);
-		return getCachedResults(matcher, start);
+	public ParseResults getMatchResults(Parser parser, int start) {
+		doMatch(parser, start);
+		return getCachedResults(parser, start);
 	}
 	
 }

@@ -1,9 +1,9 @@
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.parser.TerminalParser;
 
 /**
  * Matches everything from a beginning marker to an ending marker.
@@ -11,18 +11,18 @@ import com.googlecode.lingwah.matcher.TerminalMatcher;
  *
  * @author Ted Stockwell
  */
-public class SimpleBlockMatcher extends TerminalMatcher
+public class SimpleBlockParser extends TerminalParser
 {
 	String _beginMarker;
 	String _endMarker;
 	
-	public SimpleBlockMatcher(String beginMarker, String endMarker) {
+	public SimpleBlockParser(String beginMarker, String endMarker) {
 		_beginMarker= beginMarker;
 		_endMarker= endMarker;		
 	}
 	
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults results)
+	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
 		final String input= ctx.getInput();
 		if (input.startsWith(_beginMarker, start)) {

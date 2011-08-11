@@ -5,19 +5,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.Matcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.Parser;
 
 public class Match {
 	
 	private List<Match> children;
 	
-	private MatchContext _ctx; 
+	private ParseContext _ctx; 
 
 	/**
-	 * The matcher that created this node.
+	 * The parser that created this node.
 	 */
-	protected Matcher _matcher;
+	protected Parser _matcher;
 
 	/**
 	 * A String representation of the associated grammar element. This text is
@@ -39,19 +39,19 @@ public class Match {
 	
 	private Integer _hashcode;
 
-	public static Match create( MatchContext ctx, Matcher matcher, final int start, final int end) {
+	public static Match create( ParseContext ctx, Parser parser, final int start, final int end) {
 		Match match= new Match();
 		match._ctx= ctx;
 		match.start = start;
 		match.end = end;
-		match._matcher = matcher;
+		match._matcher = parser;
 		return match;
 	}
 	
-	public static Match create( MatchContext ctx, Matcher matcher, List<Match> children) {
+	public static Match create( ParseContext ctx, Parser parser, List<Match> children) {
 		Match match= new Match();
 		match._ctx= ctx;
-		match._matcher = matcher;
+		match._matcher = parser;
 		Match first= children.get(0);
 		Match last= children.get(children.size()-1);
 		match.start= first.getStart();
@@ -149,7 +149,7 @@ public class Match {
 		}
 	}
 
-	public Matcher getMatcher() {
+	public Parser getMatcher() {
 		return _matcher;
 	}
 

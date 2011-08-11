@@ -1,24 +1,24 @@
-package com.googlecode.lingwah.matcher.common;
+package com.googlecode.lingwah.parser.common;
 
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.matcher.TerminalMatcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.parser.TerminalParser;
 
 /**
  * Matches everything from the beginning marker (passed in the constructor) 
  * to the end of the line. 
  * @author Ted Stockwell
  */
-public class SingleLineCommentMatcher extends TerminalMatcher
+public class SingleLineCommentParser extends TerminalParser
 {
 	String _marker;
-	public SingleLineCommentMatcher(String marker) {
+	public SingleLineCommentParser(String marker) {
 		_marker= marker;
 	}
 
 	@Override
-	public void startMatching(MatchContext ctx, int start, MatchResults results)
+	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
 		final String input= ctx.getInput();
 		if (input.startsWith(_marker, start)) {

@@ -5,9 +5,9 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import com.googlecode.lingwah.MatchContext;
-import com.googlecode.lingwah.MatchResults;
-import com.googlecode.lingwah.Matcher;
+import com.googlecode.lingwah.ParseContext;
+import com.googlecode.lingwah.ParseResults;
+import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.Parsers;
 import com.googlecode.lingwah.grammars.TurtleGrammar;
 import com.googlecode.lingwah.node.Match;
@@ -17,15 +17,15 @@ import com.googlecode.lingwah.node.MatchUtils;
 public class TurtleTests
 extends TestCase
 {
-	private static MatchResults match(Matcher matcher, String input) {
-		MatchResults results= MatchContext.match(matcher, input);
+	private static ParseResults match(Parser parser, String input) {
+		ParseResults results= ParseContext.match(parser, input);
 		Assert.assertEquals(results.getContext().getInput().length(), results.longestLength());
 		return results;
 	}
 	
 	public void testBasicTriples() throws Exception {
 		TurtleGrammar turtle= TurtleGrammar.DEFINITION;
-		MatchResults results;
+		ParseResults results;
 		//Assert.assertEquals(1, match(Parsers.seq(turtle.OBJECT, Parsers.opt(Parsers.str(","))), "webbench:WebbenchModule").getMatches().size());
 		
 		String document= 	
@@ -35,17 +35,17 @@ extends TestCase
 			"test:CustomerFromManifest resource:type test:Customer ;\n" +
 			"			resource:description \"A Customer defined in a Meteor manifest\" .\n\n\n\n\n";
 		
-		Matcher literalMatcher= turtle.LITERAL;		
+		Parser literalMatcher= turtle.LITERAL;		
 		Assert.assertEquals(1, match(literalMatcher, "\"A Customer defined in a Meteor manifest\"").getMatches().size());
 		
-		Matcher urirefMatcher= turtle.URIREF;		
+		Parser urirefMatcher= turtle.URIREF;		
 		Assert.assertEquals(1, match(urirefMatcher, "<meteor:com.googlecode.meteorframework.TestBindType.instance>").getMatches().size());
 		
-		Matcher subjectMatcher= turtle.SUBJECT;		
+		Parser subjectMatcher= turtle.SUBJECT;		
 		match(subjectMatcher, "<meteor:com.googlecode.meteorframework.TestBindType.instance>");
 		match(subjectMatcher, "test:CustomerFromManifest");
 		
-		Matcher verbMatcher= turtle.VERB;	
+		Parser verbMatcher= turtle.VERB;	
 		match(verbMatcher, "resource:type");
 		
 		match(turtle.RESOURCE, "webbench:WebbenchModule");
@@ -53,21 +53,21 @@ extends TestCase
 		match(Parsers.seq(turtle.OBJECT, Parsers.opt(Parsers.rep(Parsers.str(",")))), "webbench:WebbenchModule");
 		match(turtle.OBJECT_LIST, "webbench:WebbenchModule");
 		
-		Matcher valuesMatcher= turtle.PREDICATE_VALUES;		
+		Parser valuesMatcher= turtle.PREDICATE_VALUES;		
 		match(valuesMatcher, "resource:type webbench:WebbenchModule");
 		match(valuesMatcher, "resource:description \"A Customer defined in a Meteor manifest\"");
 		
-		Matcher triplesMatcher= turtle.TRIPLES;
+		Parser triplesMatcher= turtle.TRIPLES;
 		String tripleDoc= "<meteor:com.googlecode.meteorframework.TestBindType.instance> resource:type webbench:WebbenchModule"; 
 		match(triplesMatcher, tripleDoc);
 		tripleDoc= "test:CustomerFromManifest resource:type test:Customer ;\n\t\t\tresource:description \"A Customer defined in a Meteor manifest\"";
 		match(triplesMatcher, tripleDoc);
 		
-		Matcher statementMatcher= turtle.STATEMENT;
+		Parser statementMatcher= turtle.STATEMENT;
 		String statementDoc= tripleDoc+" ."; 
 		match(statementMatcher, statementDoc);
 		
-		Matcher documentMatcher= turtle.DOCUMENT;		
+		Parser documentMatcher= turtle.DOCUMENT;		
 		results= match(documentMatcher, document);
 		Match rootNode= results.getLongestMatch();
 		
@@ -84,33 +84,33 @@ extends TestCase
 		
 
 		document= "meteor:Resource.type jdbc:JDBCDriverDescriptor"; 
-		results= MatchContext.match(turtle.PREDICATE_VALUES, document);
+		results= ParseContext.match(turtle.PREDICATE_VALUES, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(15, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor"; 
-		results= MatchContext.match(triplesMatcher, document);
+		results= ParseContext.match(triplesMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor."; 
-		results= MatchContext.match(statementMatcher, document);
+		results= ParseContext.match(statementMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor.\n\n\n\n\n\n\n";
-		results= MatchContext.match(documentMatcher, document);
+		results= ParseContext.match(documentMatcher, document);
 		Assert.assertFalse(results.success());
 		
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor ;\n" +
 			"jdbc:JDBCDriverDescriptor.protocol \"jdbc:h2\" ;\n" +
 			"jdbc:JDBCDriverDescriptor.driverClass \"org.h2.Driver\" .\n\n\n\n\n\n\n"; 
-		results= MatchContext.match(documentMatcher, document);
+		results= ParseContext.match(documentMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);

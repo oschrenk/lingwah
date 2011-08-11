@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
- * Associates a Matcher with a syntax element name.
+ * Associates a Parser with a syntax element name.
  * @author ted stockwell
  *
  */
