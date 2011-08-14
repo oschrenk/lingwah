@@ -19,6 +19,10 @@ public class Grammar {
 	{
 		return Parsers.ref();
 	}
+	final protected ParserReference ref(Parser definition)
+	{
+		return Parsers.ref(definition);
+	}
 	
 	protected StringParser string(final String string)
 	{

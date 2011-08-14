@@ -10,40 +10,43 @@ import com.googlecode.lingwah.Parser;
 
 public class ParserReference extends Parser
 {
-	private Parser _matcher;
+	private Parser _definition;
 	
 	public ParserReference() {
+	}
+	public ParserReference(Parser definition) {
+		_definition= definition;
 	}
 
 	public ParserReference set(Parser definition)
 	{
-		this._matcher = definition;
+		this._definition = definition;
 		return this;
 	}
 
 	public Parser getDefinition() {
-		return _matcher;
+		return _definition;
 	}
 	
 	
 	@Override
 	public String getDefaultLabel() {
-		return "define("+_matcher.getLabel()+")";
+		return "define("+_definition.getLabel()+")";
 	}
 	
 
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		_matcher.startMatching(ctx, start, parseResults);
+		_definition.startMatching(ctx, start, parseResults);
 	}
 
 	@Override
 	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		_matcher.completeMatching(ctx, start, parseResults);
+		_definition.completeMatching(ctx, start, parseResults);
 	}
 
 	@Override
 	public List<Parser> getDependencies() {
-		return _matcher.getDependencies();
+		return _definition.getDependencies();
 	}
 }

@@ -112,7 +112,7 @@ extends TestCase
 		ctx= new ParseContext(txt);
 		Parser four= new StringParser("4");
 		four.setLabel("FOUR");
-		parser= new RepetitionParser(new ChoiceParser(new Parser[] { four, four })); 
+		parser= new RepetitionParser(new ChoiceParser(new Parser[] { four, four }), false); 
 		results= ctx.getMatchResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
