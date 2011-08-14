@@ -6,6 +6,7 @@ import com.googlecode.lingwah.parser.ExcludingParser;
 import com.googlecode.lingwah.parser.FirstParser;
 import com.googlecode.lingwah.parser.MutableParser;
 import com.googlecode.lingwah.parser.OptionalParser;
+import com.googlecode.lingwah.parser.RegularExpressionParser;
 import com.googlecode.lingwah.parser.RepetitionParser;
 import com.googlecode.lingwah.parser.SequenceParser;
 import com.googlecode.lingwah.parser.StringParser;
@@ -123,5 +124,9 @@ public final class Parsers
 
 	public static MutableParser define(Parser parser) {
 		return new MutableParser(parser);
+	}
+
+	public static Parser regex(String expression) {
+		return new RegularExpressionParser(expression);
 	}
 }

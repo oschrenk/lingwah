@@ -106,6 +106,11 @@ public class Grammar {
 	{
 		return optional(parser);
 	}
+	
+	final protected Parser regex(String expression)
+	{
+		return Parsers.regex(expression);
+	}
 
 	protected <T> Parser[] tail(final Parser[] array)
 	{
