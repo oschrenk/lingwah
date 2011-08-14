@@ -6,7 +6,7 @@ import com.googlecode.lingwah.Grammar;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
-import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.ParserReference;
 import com.googlecode.lingwah.parser.TerminalParser;
 import com.googlecode.lingwah.parser.common.BooleanParser;
 import com.googlecode.lingwah.parser.common.DecimalParser;
@@ -93,10 +93,10 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 	public final Parser directive= seq(cho(importt, base), optws, str(";"));
 		
 	public final Parser blockType= cho( seq(resource, ws, resource), seq(str("@external"), ws, resource), resource);
-	public final MutableParser blockBody= define(rep(seq(propertyValuePair, optws, str(";"))));
+	public final ParserReference blockBody= ref(rep(seq(propertyValuePair, optws, str(";"))));
 	public final Parser block= seq(blockType, optws, str("{"), optws, blockBody, optws, str("}"));
 	{
-		blockBody.define(seq(cho(block, blockBody.getDefinition()), opt(rep(seq(optws, cho(block, blockBody.getDefinition())))))); // blocks can be nested
+		blockBody.set(seq(cho(block, blockBody.getDefinition()), opt(rep(seq(optws, cho(block, blockBody.getDefinition())))))); // blocks can be nested
 	}
 		
 	public final Parser statement= seq(cho(directive, triple, block));

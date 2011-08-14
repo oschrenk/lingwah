@@ -90,4 +90,8 @@ public abstract class Parser
 		return _isRecursive;
 	}
 	
+	public Parser excluding(Parser...filters) {
+		return Parsers.excluding(this, filters);
+	}
+	
 }

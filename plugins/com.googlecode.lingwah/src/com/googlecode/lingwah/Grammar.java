@@ -5,7 +5,9 @@ import java.util.Arrays;
 
 import com.googlecode.lingwah.parser.ChoiceParser;
 import com.googlecode.lingwah.parser.FirstParser;
-import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.ParserReference;
+import com.googlecode.lingwah.parser.RepetitionParser;
+import com.googlecode.lingwah.parser.SequenceParser;
 import com.googlecode.lingwah.parser.StringParser;
 
 public class Grammar {
@@ -13,9 +15,9 @@ public class Grammar {
 	protected Grammar() { 
 	}
 	
-	final protected MutableParser define(final Parser parser)
+	final protected ParserReference ref()
 	{
-		return Parsers.define(parser);
+		return Parsers.ref();
 	}
 	
 	protected StringParser string(final String string)
@@ -40,11 +42,11 @@ public class Grammar {
 		return Parsers.range(from, to);
 	}
 
-	protected Parser sequence(final Parser... matchers)
+	protected SequenceParser sequence(final Parser... matchers)
 	{
 		return Parsers.sequence(matchers);
 	}
-	final protected Parser seq(final Parser... matchers)
+	final protected SequenceParser seq(final Parser... matchers)
 	{
 		return sequence(matchers);
 	}
@@ -77,19 +79,19 @@ public class Grammar {
 		return excluding(parser, filters);
 	}
 
-	protected Parser repeat(final Parser parser)
+	protected RepetitionParser repeat(final Parser parser)
 	{
 		return Parsers.repeat(parser);
 	}
-	final protected Parser rep(final Parser parser)
+	final protected RepetitionParser rep(final Parser parser)
 	{
 		return repeat(parser);
 	}
-	final protected Parser oneOrMore(final Parser parser)
+	final protected RepetitionParser oneOrMore(final Parser parser)
 	{
 		return Parsers.oneOrMore(parser);
 	}
-	final protected Parser zeroOrMore(final Parser parser)
+	final protected RepetitionParser zeroOrMore(final Parser parser)
 	{
 		return Parsers.zeroOrMore(parser);
 	}

@@ -8,15 +8,14 @@ import com.googlecode.lingwah.Parser;
 
 
 
-public class MutableParser extends Parser
+public class ParserReference extends Parser
 {
 	private Parser _matcher;
 	
-	public MutableParser(Parser parser) {
-		_matcher= parser;
+	public ParserReference() {
 	}
 
-	public MutableParser define(Parser definition)
+	public ParserReference set(Parser definition)
 	{
 		this._matcher = definition;
 		return this;

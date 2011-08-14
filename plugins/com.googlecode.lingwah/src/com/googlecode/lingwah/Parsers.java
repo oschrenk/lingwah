@@ -4,7 +4,7 @@ package com.googlecode.lingwah;
 import com.googlecode.lingwah.parser.ChoiceParser;
 import com.googlecode.lingwah.parser.ExcludingParser;
 import com.googlecode.lingwah.parser.FirstParser;
-import com.googlecode.lingwah.parser.MutableParser;
+import com.googlecode.lingwah.parser.ParserReference;
 import com.googlecode.lingwah.parser.OptionalParser;
 import com.googlecode.lingwah.parser.RegularExpressionParser;
 import com.googlecode.lingwah.parser.RepetitionParser;
@@ -44,11 +44,11 @@ public final class Parsers
 		return new RangeParser(to, from);
 	}
 
-	public static Parser sequence(final Parser... matchers)
+	public static SequenceParser sequence(final Parser... matchers)
 	{
 		return new SequenceParser(matchers);
 	}
-	public static final Parser seq(final Parser... matchers)
+	public static final SequenceParser seq(final Parser... matchers)
 	{
 		return sequence(matchers);
 	}
@@ -82,21 +82,21 @@ public final class Parsers
 		return excluding(parser, filters);
 	}
 
-	public static Parser repeat(final Parser parser)
+	public static RepetitionParser repeat(final Parser parser)
 	{
-		return new RepetitionParser(parser);
+		return oneOrMore(parser);
 	}
-	public static final Parser rep(final Parser parser)
+	public static final RepetitionParser rep(final Parser parser)
 	{
-		return repeat(parser);
+		return oneOrMore(parser);
 	}
-	public static final Parser oneOrMore(final Parser parser)
+	public static final RepetitionParser oneOrMore(final Parser parser)
 	{
-		return repeat(parser);
+		return new RepetitionParser(parser, false);
 	}
-	public static final Parser zeroOrMore(final Parser parser)
+	public static final RepetitionParser zeroOrMore(final Parser parser)
 	{
-		return opt(repeat(parser));
+		return new RepetitionParser(parser, true);
 	}
 	
 
@@ -122,8 +122,8 @@ public final class Parsers
 		return dest;
 	}
 
-	public static MutableParser define(Parser parser) {
-		return new MutableParser(parser);
+	public static ParserReference ref() {
+		return new ParserReference();
 	}
 
 	public static Parser regex(String expression) {

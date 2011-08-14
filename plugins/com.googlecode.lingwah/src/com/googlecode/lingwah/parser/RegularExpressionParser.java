@@ -4,14 +4,12 @@
 package com.googlecode.lingwah.parser;
 
 
-import java.lang.annotation.Annotation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseError;
 import com.googlecode.lingwah.ParseResults;
-import com.googlecode.lingwah.annotations.MatcherDefinition;
 
 public final class RegularExpressionParser extends TerminalParser
 {

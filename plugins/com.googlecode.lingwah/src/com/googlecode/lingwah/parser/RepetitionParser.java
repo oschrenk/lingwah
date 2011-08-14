@@ -12,6 +12,7 @@ import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseError;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
+import com.googlecode.lingwah.Parsers;
 import com.googlecode.lingwah.node.Match;
 
 /**
@@ -22,10 +23,15 @@ import com.googlecode.lingwah.node.Match;
 public final class RepetitionParser extends Parser
 {
 	private final Parser _matcher;
+	private final boolean _isOptional;
 
-	public RepetitionParser(Parser parser)
+	/**
+	 * @param _isOptional true if repeat zero or more, else repeat one of more
+	 */
+	public RepetitionParser(Parser parser, boolean isOptional)
 	{
 		_matcher= parser;
+		_isOptional= isOptional;
 	}
 	
 	@Override
@@ -60,6 +66,10 @@ public final class RepetitionParser extends Parser
 			}
 		};
 		
+		// add a match of zero length
+		if (_isOptional)
+			targetResults.addMatch(Match.create(ctx, this, start, start));
+		
 		ctx.doMatch(_matcher, start).addListener(new RepetitionListener(null));
 	}
 
@@ -72,5 +82,13 @@ public final class RepetitionParser extends Parser
 	@Override
 	public List<Parser> getDependencies() {
 		return Arrays.asList(new Parser[] { _matcher });
+	}
+	
+	public SequenceParser separatedBy(Parser separator) {
+		return Parsers.seq(_matcher, Parsers.opt(Parsers.rep(Parsers.seq(separator, _matcher))));
+	}
+
+	public boolean isOptional() {
+		return _isOptional;
 	}
 }

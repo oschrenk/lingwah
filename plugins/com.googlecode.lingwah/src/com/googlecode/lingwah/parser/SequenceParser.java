@@ -20,11 +20,11 @@ public class SequenceParser extends Parser {
 		}
 	}
 	
-	private final Parser[] parsers;
+	private final Parser[] _parsers;
 	private final Parser _tailMatcher;
 
 	public SequenceParser(Parser[] matchers) {
-		this.parsers = matchers;
+		this._parsers = matchers;
 		_tailMatcher= matchers.length <= 1 ? null : Parsers.seq(Parsers.tail(matchers));
 	}
 	
@@ -32,7 +32,7 @@ public class SequenceParser extends Parser {
 	public String getDefaultLabel() {
 		String label= "sequence(";
 		boolean first= true;
-		for (Parser parser:parsers) {
+		for (Parser parser:_parsers) {
 			if (!first)
 				label+=", ";
 			label+= parser.getLabel();
@@ -44,7 +44,7 @@ public class SequenceParser extends Parser {
 
 	@Override
 	public void startMatching(final ParseContext ctx, int start, final ParseResults targetResults) {
-		if (parsers.length <= 0) {
+		if (_parsers.length <= 0) {
 			targetResults.setError("This sequence contains no elements");
 			return;
 		}
@@ -52,8 +52,8 @@ public class SequenceParser extends Parser {
 		final ResultsInfo info= new ResultsInfo();
 		targetResults.putMatcherInfo(info);
 		
-		ParseResults headResults= ctx.doMatch(parsers[0], start);
-		if (parsers.length <= 1) {
+		ParseResults headResults= ctx.doMatch(_parsers[0], start);
+		if (_parsers.length <= 1) {
 			headResults.addListener(new ParseResults.Listener() {
 				@Override
 				public void onMatchFound(ParseResults results, Match node) {
@@ -103,7 +103,7 @@ public class SequenceParser extends Parser {
 	
 	@Override
 	public List<Parser> getDependencies() {
-		return Arrays.asList(parsers);
+		return Arrays.asList(_parsers);
 	}
 
 	@Override
@@ -114,6 +114,22 @@ public class SequenceParser extends Parser {
 			if (info.error != null)
 				parseResults.setError(info.error);
 		}
+	}
+	
+	public SequenceParser separatedBy(Parser separator) {
+		
+		if (_parsers.length <= 1)
+			return this;
+		
+		Parser[] parsers= new Parser[_parsers.length*2 -1];
+		int j= 0;
+		for (int i= 0; i < _parsers.length; i++) {
+			parsers[j++]= _parsers[i];
+			if (i < _parsers.length-1)
+				parsers[j++]= separator;
+		}
+		
+		return Parsers.seq(parsers);
 	}
 	
 }
