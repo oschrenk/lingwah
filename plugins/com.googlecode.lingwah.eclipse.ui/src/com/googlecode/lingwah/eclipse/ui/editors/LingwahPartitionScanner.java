@@ -8,9 +8,12 @@ import com.googlecode.lingwah.Grammar;
 public class LingwahPartitionScanner 
 implements IPartitionTokenScanner 
 {
+	private EclipseGrammarAdapter _grammar;
+	private IDocument _document;
 
-	public LingwahPartitionScanner(Grammar _grammar) {
-
+	public LingwahPartitionScanner(IDocument document, EclipseGrammarAdapter grammar) {
+		_grammar= grammar;
+		_document= document;
 	}
 
 	@Override
@@ -42,10 +45,5 @@ implements IPartitionTokenScanner
 			String contentType, int partitionOffset) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	public String[] getLegalContentTypes() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

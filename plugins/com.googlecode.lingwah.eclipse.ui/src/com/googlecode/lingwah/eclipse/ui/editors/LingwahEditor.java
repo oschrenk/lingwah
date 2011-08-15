@@ -6,17 +6,20 @@ import com.googlecode.lingwah.Grammar;
 
 public class LingwahEditor extends TextEditor {
 
-	private ColorManager colorManager;
+	private EclipseGrammarAdapter _grammar;
 
 	public LingwahEditor(Grammar grammar) {
 		super();
-		colorManager = new ColorManager();
-		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
-		setDocumentProvider(new LingwahDocumentProvider(grammar));
+		_grammar= new EclipseGrammarAdapter(grammar);
+		setSourceViewerConfiguration(new LingwahConfiguration(_grammar));
+		setDocumentProvider(new LingwahDocumentProvider(_grammar));
 	}
 	public void dispose() {
-		colorManager.dispose();
-		super.dispose();
+		try {
+			_grammar.dispose();
+		}
+		finally {
+			super.dispose();
+		}
 	}
-
 }
