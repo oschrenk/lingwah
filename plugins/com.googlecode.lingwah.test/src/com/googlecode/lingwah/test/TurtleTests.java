@@ -18,7 +18,7 @@ public class TurtleTests
 extends TestCase
 {
 	private static ParseResults match(Parser parser, String input) {
-		ParseResults results= ParseContext.match(parser, input);
+		ParseResults results= ParseContext.parse(parser, input);
 		Assert.assertEquals(results.getContext().getDocument().length(), results.longestLength());
 		return results;
 	}
@@ -84,33 +84,33 @@ extends TestCase
 		
 
 		document= "meteor:Resource.type jdbc:JDBCDriverDescriptor"; 
-		results= ParseContext.match(turtle.PREDICATE_VALUES, document);
+		results= ParseContext.parse(turtle.PREDICATE_VALUES, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(15, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor"; 
-		results= ParseContext.match(triplesMatcher, document);
+		results= ParseContext.parse(triplesMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor."; 
-		results= ParseContext.match(statementMatcher, document);
+		results= ParseContext.parse(statementMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);
 		
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor.\n\n\n\n\n\n\n";
-		results= ParseContext.match(documentMatcher, document);
+		results= ParseContext.parse(documentMatcher, document);
 		Assert.assertFalse(results.success());
 		
 		document= "h2:H2Driver meteor:Resource.type jdbc:JDBCDriverDescriptor ;\n" +
 			"jdbc:JDBCDriverDescriptor.protocol \"jdbc:h2\" ;\n" +
 			"jdbc:JDBCDriverDescriptor.driverClass \"org.h2.Driver\" .\n\n\n\n\n\n\n"; 
-		results= ParseContext.match(documentMatcher, document);
+		results= ParseContext.parse(documentMatcher, document);
 		Assert.assertFalse(results.success());
 		Assert.assertEquals(27, results.getError().position);
 		Assert.assertEquals("Expected whitespace", results.getError().errorMsg);

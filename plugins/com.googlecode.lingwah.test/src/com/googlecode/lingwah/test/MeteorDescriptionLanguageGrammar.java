@@ -2,6 +2,7 @@ package com.googlecode.lingwah.test;
 
 import java.util.HashMap;
 
+import com.googlecode.lingwah.Document;
 import com.googlecode.lingwah.Grammar;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
@@ -34,7 +35,7 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 		@Override
 		public void startMatching(ParseContext ctx, int start, ParseResults parseResults) 
 		{
-			final String input= ctx.getDocument();
+			final Document input= ctx.getDocument();
 			if (input.length() <= start || input.charAt(start) != '<') {
 				parseResults.setError("Expected '<'");
 				return;

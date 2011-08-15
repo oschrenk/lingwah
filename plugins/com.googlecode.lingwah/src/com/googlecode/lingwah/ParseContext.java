@@ -47,7 +47,13 @@ public class ParseContext {
 	/**
 	 * A convenience method for performing a single match.
 	 */
-	public static ParseResults match(Parser parser, Document input) {
+	public static ParseResults parse(Parser parser, Document input) {
+		return new ParseContext(input).getMatchResults(parser, 0);
+	}
+	/**
+	 * A convenience method for performing a single match.
+	 */
+	public static ParseResults parse(Parser parser, String input) {
 		return new ParseContext(input).getMatchResults(parser, 0);
 	}
 	

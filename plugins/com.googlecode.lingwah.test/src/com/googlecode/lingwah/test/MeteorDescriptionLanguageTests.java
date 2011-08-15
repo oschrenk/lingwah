@@ -19,7 +19,7 @@ public class MeteorDescriptionLanguageTests
 extends TestCase
 {
 	private static ParseResults match(Parser parser, String input) {
-		return ParseContext.match(parser, input);
+		return ParseContext.parse(parser, input);
 	}
 	
 
