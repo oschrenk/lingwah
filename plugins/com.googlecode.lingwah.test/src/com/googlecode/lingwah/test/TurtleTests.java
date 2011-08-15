@@ -19,7 +19,7 @@ extends TestCase
 {
 	private static ParseResults match(Parser parser, String input) {
 		ParseResults results= ParseContext.match(parser, input);
-		Assert.assertEquals(results.getContext().getInput().length(), results.longestLength());
+		Assert.assertEquals(results.getContext().getDocument().length(), results.longestLength());
 		return results;
 	}
 	

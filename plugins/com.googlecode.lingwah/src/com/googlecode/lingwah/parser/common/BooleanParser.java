@@ -1,6 +1,7 @@
 package com.googlecode.lingwah.parser.common;
 
 
+import com.googlecode.lingwah.Document;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.parser.TerminalParser;
@@ -14,7 +15,7 @@ extends TerminalParser
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults results) 
 	{
-		String input= ctx.getInput();
+		Document input= ctx.getDocument();
 		String s= null;
 		if (start < input.length())
 		{

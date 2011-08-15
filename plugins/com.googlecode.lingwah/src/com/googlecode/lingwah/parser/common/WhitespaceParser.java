@@ -1,6 +1,7 @@
 package com.googlecode.lingwah.parser.common;
 
 
+import com.googlecode.lingwah.Document;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.parser.TerminalParser;
@@ -15,7 +16,7 @@ public class WhitespaceParser extends TerminalParser
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
-		final String input= ctx.getInput();
+		final Document input= ctx.getDocument();
 		int len= input.length();
 		int i= start;
 		while (i < len && Character.isWhitespace(input.charAt(i)))

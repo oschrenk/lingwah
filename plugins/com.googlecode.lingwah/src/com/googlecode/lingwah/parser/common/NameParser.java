@@ -1,5 +1,6 @@
 package com.googlecode.lingwah.parser.common;
 
+import com.googlecode.lingwah.Document;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.parser.TerminalParser;
@@ -16,22 +17,21 @@ public class NameParser extends TerminalParser {
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
-		final String input = ctx.getInput();
-		char[] cs = input.toCharArray();
+		final Document input = ctx.getDocument();
 		
-		if (cs.length <= start) { 
+		if (input.length() <= start) { 
 			results.setError("A name must have at least one letter");
 			return;
 		}
 
-		if (!isNameStartChar(cs[start])) {
-			results.setError("Not a valid name start charaacter '" + cs[start] + "'");
+		if (!isNameStartChar(input.charAt(start))) {
+			results.setError("Not a valid name start charaacter '" + input.charAt(start) + "'");
 			return;
 		}
 		
 		int i = start + 1;
-		for (; i < cs.length; i++) {
-			if (!isNameChar(cs[i]))
+		for (; i < input.length(); i++) {
+			if (!isNameChar(input.charAt(i)))
 				break;
 		}
 		results.addMatch(i);

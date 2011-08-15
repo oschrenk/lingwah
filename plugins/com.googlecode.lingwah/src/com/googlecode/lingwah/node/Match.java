@@ -116,7 +116,7 @@ public class Match {
 
 	public String getText() {
 		if (this.text == null) {
-			text= _ctx.getInput().substring(start, end);
+			text= _ctx.getDocument().substring(start, end);
 		}
 		return this.text;
 	}

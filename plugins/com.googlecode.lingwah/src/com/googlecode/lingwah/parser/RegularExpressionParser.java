@@ -33,7 +33,7 @@ public final class RegularExpressionParser extends TerminalParser
 
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		Matcher m = _pattern.matcher(ctx.getInput().substring(start));
+		Matcher m = _pattern.matcher(ctx.getDocument().substring(start));
 		if (!m.matches()) {
 			parseResults.setError(new ParseError(this, "Expected "+_target, m.end()));
 			return;

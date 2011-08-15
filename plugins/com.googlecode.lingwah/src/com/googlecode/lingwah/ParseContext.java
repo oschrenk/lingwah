@@ -33,7 +33,7 @@ public class ParseContext {
 	
 	
 	
-	private String _input;
+	private Document _input;
 	private HashMap<Parser, Map<Integer, ParseResults>> _cache= 
 		new HashMap<Parser, Map<Integer,ParseResults>>();
 	
@@ -47,12 +47,15 @@ public class ParseContext {
 	/**
 	 * A convenience method for performing a single match.
 	 */
-	public static ParseResults match(Parser parser, String input) {
+	public static ParseResults match(Parser parser, Document input) {
 		return new ParseContext(input).getMatchResults(parser, 0);
 	}
 	
-	public ParseContext(String input) {
+	public ParseContext(Document input) {
 		_input= input;
+	}
+	public ParseContext(String input) {
+		_input= new StringDocument(input);
 	}
 	
 	
@@ -103,7 +106,7 @@ public class ParseContext {
 	}
 	
 
-	public String getInput() {
+	public Document getDocument() {
 		return _input;
 	}
 

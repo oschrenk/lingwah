@@ -34,7 +34,7 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 		@Override
 		public void startMatching(ParseContext ctx, int start, ParseResults parseResults) 
 		{
-			final String input= ctx.getInput();
+			final String input= ctx.getDocument();
 			if (input.length() <= start || input.charAt(start) != '<') {
 				parseResults.setError("Expected '<'");
 				return;

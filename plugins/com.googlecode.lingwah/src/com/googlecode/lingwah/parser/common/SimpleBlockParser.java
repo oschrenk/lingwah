@@ -1,6 +1,7 @@
 package com.googlecode.lingwah.parser.common;
 
 
+import com.googlecode.lingwah.Document;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.parser.TerminalParser;
@@ -24,7 +25,7 @@ public class SimpleBlockParser extends TerminalParser
 	@Override
 	public void startMatching(ParseContext ctx, int start, ParseResults results)
 	{
-		final String input= ctx.getInput();
+		final Document input= ctx.getDocument();
 		if (input.startsWith(_beginMarker, start)) {
 			int i= input.indexOf(_endMarker, start+_beginMarker.length());
 			if (0 <= i) {
