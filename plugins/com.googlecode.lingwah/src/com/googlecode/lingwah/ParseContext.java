@@ -12,7 +12,7 @@ import java.util.Map;
  * ParseContext implements strategies for memoizing match results 
  * and avoiding recursion.
  * 
- * Specificially, ParseContext avoids left recursion using the memoization 
+ * Specifically, ParseContext avoids left recursion using the memoization 
  * techniques described in the paper "Memoization in Top-Down Parsing" by
  * Mark Johnson 
  *   
