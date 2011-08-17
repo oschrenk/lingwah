@@ -87,6 +87,9 @@ public final class RepetitionParser extends Parser
 	public SequenceParser separatedBy(Parser separator) {
 		return Parsers.seq(_matcher, Parsers.opt(Parsers.rep(Parsers.seq(separator, _matcher))));
 	}
+	public final SequenceParser sepBy(Parser separator) {
+		return separatedBy(separator);
+	}
 
 	public boolean isOptional() {
 		return _isOptional;

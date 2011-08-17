@@ -131,5 +131,7 @@ public class SequenceParser extends Parser {
 		
 		return Parsers.seq(parsers);
 	}
-	
+	public final SequenceParser sepBy(Parser separator) {
+		return separatedBy(separator);
+	}
 }
