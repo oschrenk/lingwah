@@ -48,13 +48,13 @@ public class ParseContext {
 	 * A convenience method for performing a single match.
 	 */
 	public static ParseResults parse(Parser parser, Document input) {
-		return new ParseContext(input).getMatchResults(parser, 0);
+		return new ParseContext(input).getParseResults(parser, 0);
 	}
 	/**
 	 * A convenience method for performing a single match.
 	 */
 	public static ParseResults parse(Parser parser, String input) {
-		return new ParseContext(input).getMatchResults(parser, 0);
+		return new ParseContext(input).getParseResults(parser, 0);
 	}
 	
 	public ParseContext(Document input) {
@@ -150,7 +150,7 @@ public class ParseContext {
 	 * Maybe non-terminals also complete during a call to doMatch but I do not 
 	 * know that for sure.  
 	 */
-	public ParseResults getMatchResults(Parser parser, int start) {
+	public ParseResults getParseResults(Parser parser, int start) {
 		doMatch(parser, start);
 		return getCachedResults(parser, start);
 	}

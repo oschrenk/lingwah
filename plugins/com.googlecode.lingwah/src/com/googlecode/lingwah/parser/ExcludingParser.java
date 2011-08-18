@@ -42,7 +42,7 @@ public final class ExcludingParser extends Parser
 		if (filterMatcher.isRecursive())
 			throw new RecursiveMatchersNotSupported(this);
 		
-		final ParseResults filterResults= ctx.getMatchResults(filterMatcher, start);
+		final ParseResults filterResults= ctx.getParseResults(filterMatcher, start);
 		
 		ctx.doMatch(parser, start).addListener(new ParseResults.Listener() {
 			@Override

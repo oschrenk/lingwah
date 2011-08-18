@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.Parser;
+import com.googlecode.lingwah.parser.ParserReference;
 
 public class Match {
 	
@@ -149,7 +150,7 @@ public class Match {
 		}
 	}
 
-	public Parser getMatcher() {
+	public Parser getParser() {
 		return _matcher;
 	}
 
@@ -228,6 +229,14 @@ public class Match {
 		}
 
 		return true;
+	}
+
+	public Match getChildByType(Parser parser) {
+		return MatchNavigation.findChildByType(this, parser);
+	}
+
+	public List<Match> getChildrenByType(ParserReference parser) {
+		return MatchNavigation.findChildrenByType(this, parser);
 	}
 	
 }

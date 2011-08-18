@@ -55,7 +55,7 @@ extends TestCase
 		txt= "4-3";
 		ctx= new ParseContext(txt);
 		parser= new StringParser("4-3"); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
@@ -63,7 +63,7 @@ extends TestCase
 		txt= "43";
 		ctx= new ParseContext(txt);
 		parser= seq(str("4"), str("3")); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
@@ -71,7 +71,7 @@ extends TestCase
 		txt= "4";
 		ctx= new ParseContext(txt);
 		parser= choice(four, three); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		List<Match> nodes= MatchNavigation.findAllByType(results.getLongestMatch(), four);
@@ -80,7 +80,7 @@ extends TestCase
 		txt= "3";
 		ctx= new ParseContext(txt);
 		parser= choice(four, three); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
@@ -89,21 +89,21 @@ extends TestCase
 		txt= "3";
 		ctx= new ParseContext(txt);
 		parser= rep(str("3")); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 
 		txt= "3";
 		ctx= new ParseContext(txt);
 		parser= opt(rep(str("3"))); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
 		txt= "43";
 		ctx= new ParseContext(txt);
 		parser= seq(str("4"), opt(rep(str("3")))); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		assertEquals(2, results.getMatches().size());
@@ -113,7 +113,7 @@ extends TestCase
 		Parser four= new StringParser("4");
 		four.setLabel("FOUR");
 		parser= new RepetitionParser(new ChoiceParser(new Parser[] { four, four }), false); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
@@ -134,32 +134,32 @@ extends TestCase
 		txt= "";
 		ctx= new ParseContext(txt);
 		parser= opt(rep(str("3"))); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
 		txt= "4";
 		ctx= new ParseContext(txt);
 		parser= seq(four, opt(rep(seq(opt(str("2")), four)))); 
-		results= ctx.getMatchResults(parser, 0); 
+		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
 		txt= " ";
 		ctx= new ParseContext(txt);
-		results= ctx.getMatchResults(opt(rep(choice(str(" "), str("\t")))), 0); 
+		results= ctx.getParseResults(opt(rep(choice(str(" "), str("\t")))), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
 		txt= "T";
 		ctx= new ParseContext(txt);
-		results= ctx.getMatchResults(anyChar(), 0); 
+		results= ctx.getParseResults(anyChar(), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
 		txt= "T";
 		ctx= new ParseContext(txt);
-		results= ctx.getMatchResults(excluding(anyChar(), four), 0); 
+		results= ctx.getParseResults(excluding(anyChar(), four), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
 		assertEquals(results.longestLength(), txt.length());
 		
@@ -170,7 +170,7 @@ extends TestCase
 		
 		String txt= "4-3";
 		ParseContext ctx= new ParseContext(txt);
-		ParseResults results= ctx.getMatchResults(ExprGrammar.INSTANCE.expr, 0); 
+		ParseResults results= ctx.getParseResults(ExprGrammar.INSTANCE.expr, 0); 
 		assertTrue(results.success());
 		assertEquals(results.longestLength(), txt.length());
 	}

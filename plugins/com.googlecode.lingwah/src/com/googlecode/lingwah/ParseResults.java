@@ -140,7 +140,7 @@ public class ParseResults {
 		}
 	}
 	synchronized public void addMatch(Match match) {
-		if (match.getMatcher() != _matcher)
+		if (match.getParser() != _matcher)
 			match= Match.create(_ctx, _matcher, Arrays.asList(new Match[] { match }));
 		if (_matches == null) 
 			_matches= new ArrayList<Match>();

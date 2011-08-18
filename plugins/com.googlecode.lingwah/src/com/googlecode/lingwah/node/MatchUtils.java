@@ -5,7 +5,7 @@ import java.util.List;
 public class MatchUtils {
 	
 	public static String toXML(Match element) {
-		String xml= "<match start='"+element.getStart()+"' end='"+element.getEnd()+"' parser="+element.getMatcher().getLabel()+">\n";
+		String xml= "<match start='"+element.getStart()+"' end='"+element.getEnd()+"' parser="+element.getParser().getLabel()+">\n";
 			xml+= "\t<text><![CDATA["+element.getText()+"]]></text>\n";
 		List<Match> children= element.getChildren();
 		if (!children.isEmpty()) {

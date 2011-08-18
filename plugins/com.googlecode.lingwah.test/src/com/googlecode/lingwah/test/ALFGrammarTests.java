@@ -421,7 +421,7 @@ public class ALFGrammarTests extends TestCase {
 	protected ParseResults testParser(Parser matcher, String text) {
 		ParseContext context= new ParseContext(text);
 		//context.trace(LohrGrammar.DEFINITION.Identifier, false);
-		ParseResults results= context.getMatchResults(matcher, 0);
+		ParseResults results= context.getParseResults(matcher, 0);
 		
 		if (!results.success())
 			assertTrue("Match failed at position "+results.getError().position+":"+results.getError().errorMsg, results.success());
