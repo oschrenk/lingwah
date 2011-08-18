@@ -20,7 +20,8 @@ public class CalculatorGrammar extends Grammar {
 		expr.set(cho(decimal, addition, subtraction, multiplication, division, group));
 	}
 	
-	public CalculatorGrammar() {
+	private CalculatorGrammar() {
 		init();
 	}
+	public static final CalculatorGrammar INSTANCE = new CalculatorGrammar();
 }
