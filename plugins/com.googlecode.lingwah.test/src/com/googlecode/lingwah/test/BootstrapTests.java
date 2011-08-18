@@ -177,6 +177,29 @@ extends TestCase
 	}
 	
 	public void testCalculator() throws Exception {
+		String txt;
+		ParseContext ctx;
+		ParseResults results; 
+		CalculatorGrammar grammar= CalculatorGrammar.INSTANCE;
+
+		txt= "9";
+		ctx= new ParseContext(txt);
+		results= ctx.getParseResults(grammar.decimal, 0); 
+		assertTrue(results.getErrorMessage(), results.success());
+		assertEquals(results.longestLength(), txt.length());
+
+		txt= "9*9";
+		ctx= new ParseContext(txt);
+		results= ctx.getParseResults(grammar.decimal, 0); 
+		assertTrue(results.getErrorMessage(), results.success());
+		assertEquals(1, results.longestLength());
+
+		txt= "9*9";
+		ctx= new ParseContext(txt);
+		results= ctx.getParseResults(grammar.multiplication, 0); 
+		assertTrue(results.getErrorMessage(), results.success());
+		assertEquals(results.longestLength(), txt.length());
+
 		assertEquals(new BigDecimal("81"), Calculator.parse("9 * 9"));
 		assertEquals(new BigDecimal("2082.5615313302951609592032881793"), Calculator.parse("(6543.56 - 1)/ 3.14159265/*Pi*/"));
 	}

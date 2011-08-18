@@ -61,7 +61,7 @@ public class Grammar {
 	}
 	final protected ChoiceParser cho(final Parser... matchers)
 	{
-		return cho(matchers);
+		return Parsers.cho(matchers);
 	}
 	
 	protected Parser anyChar()

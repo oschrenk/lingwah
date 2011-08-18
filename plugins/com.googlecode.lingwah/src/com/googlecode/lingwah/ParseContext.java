@@ -37,7 +37,7 @@ public class ParseContext {
 	private HashMap<Parser, Map<Integer, ParseResults>> _cache= 
 		new HashMap<Parser, Map<Integer,ParseResults>>();
 	
-	private boolean _trace= false;
+	private boolean _trace= true;
 	private int _tabs= 0;
 	private HashMap<Parser, Boolean> _traceFlags= new HashMap<Parser, Boolean>();
 	private boolean _inProgress;

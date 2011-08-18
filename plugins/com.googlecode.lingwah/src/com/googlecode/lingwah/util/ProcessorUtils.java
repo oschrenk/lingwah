@@ -14,8 +14,8 @@ public class ProcessorUtils {
 	private static final Method __defaultLeaveMethod;
 	static {
 		try {
-			__defaultVisitMethod= MatchProcessor.class.getMethod("visit", new Class[] { Match.class });
-			__defaultLeaveMethod= MatchProcessor.class.getMethod("leave", new Class[] { Match.class });
+			__defaultVisitMethod= MatchProcessor.class.getMethod("process", new Class[] { Match.class });
+			__defaultLeaveMethod= MatchProcessor.class.getMethod("complete", new Class[] { Match.class });
 		} catch (Exception e) {
 			throw new RuntimeException("Internal Error", e);
 		}
@@ -38,8 +38,16 @@ public class ProcessorUtils {
 		if (visitMethods == null) 
 			__visitMethodCache.put(visitorClass, visitMethods= new HashMap<String, Method>());
 		String methodName= node.getParser().getLabel();
-		methodName= "visit"+methodName.substring(0, 1).toUpperCase()+methodName.substring(1);
+		methodName= "process"+methodName.substring(0, 1).toUpperCase()+methodName.substring(1);
 		visitMethod= visitMethods.get(methodName);
+		
+		if (visitMethod == null) {
+			try {
+				visitMethod= visitorClass.getMethod(methodName, Match.class);
+				visitMethods.put(methodName, visitMethod);
+			} catch (Exception e) {
+			}
+		}
 
 		if (visitMethod == null) 
 			return __defaultVisitMethod;
@@ -60,8 +68,16 @@ public class ProcessorUtils {
 		if (visitMethods == null) 
 			__leaveMethodCache.put(visitorClass, visitMethods= new HashMap<String, Method>());
 		String methodName= node.getParser().getLabel();
-		methodName= "leave"+methodName.substring(0, 1).toUpperCase()+methodName.substring(1);
+		methodName= "complete"+methodName.substring(0, 1).toUpperCase()+methodName.substring(1);
 		visitMethod= visitMethods.get(methodName);
+		
+		if (visitMethod == null) {
+			try {
+				visitMethod= visitorClass.getMethod(methodName, Match.class);
+				visitMethods.put(methodName, visitMethod);
+			} catch (Exception e) {
+			}
+		}
 
 		if (visitMethod == null) 
 			return __defaultLeaveMethod;

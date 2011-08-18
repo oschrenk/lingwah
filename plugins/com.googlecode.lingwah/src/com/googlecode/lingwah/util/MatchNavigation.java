@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.Parser;
-import com.googlecode.lingwah.parser.ParserReference;
 
 public class MatchNavigation
 {
@@ -52,15 +51,37 @@ public class MatchNavigation
 		return null;
 	}
 
-	public static Match findChildByType(Match match, Parser parser) {
-		// TODO Auto-generated method stub
+	@SuppressWarnings("unchecked")
+	public static <T extends Match> T findChildByType(Match match, Parser parser) {
+		List<Match> todo = new ArrayList<Match>();
+		todo.addAll(match.getChildren());
+
+		while (!todo.isEmpty()) 
+		{
+			Match node= todo.remove(0);
+			
+			if (node.getParser() == parser)
+				return (T)node;
+		}
+
 		return null;
 	}
 
-	public static List<Match> findChildrenByType(Match match,
-			ParserReference parser) {
-		// TODO Auto-generated method stub
-		return null;
+	@SuppressWarnings("unchecked")
+	public static <T extends Match> List<T> findChildrenByType(Match match, Parser parser) {
+		List<T> matches = new ArrayList<T>();
+		List<Match> todo = new ArrayList<Match>();
+		todo.addAll(match.getChildren());
+
+		while (!todo.isEmpty()) 
+		{
+			Match node= todo.remove(0);
+			
+			if (node.getParser() == parser)
+				matches.add((T)node);
+		}
+
+		return matches;
 	}	
 
 }

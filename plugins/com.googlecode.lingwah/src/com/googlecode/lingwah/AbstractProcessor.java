@@ -15,28 +15,29 @@ abstract public class AbstractProcessor implements MatchProcessor {
 
 	private HashMap<Match, Object> _results= new HashMap<Match, Object>();
 	private HashSet<Match> _visited= new HashSet<Match>();
+	private HashSet<Match> _left= new HashSet<Match>();
 	private Match _currentMatch;
 	
 	
-	public boolean visit(Match node) {
+	public boolean process(Match node) {
 		
 		if (_visited.contains(node))
-			return false;
+			return true;
 		_visited.add(node);
 		
 		Method visitMethod = ProcessorUtils.findVisitMethod(this, node);
 		Boolean visitChildren;
 		try {
-			visitChildren = (Boolean) visitMethod.invoke(this, new Object[] { this });
+			visitChildren = (Boolean) visitMethod.invoke(this, new Object[] { node });
 		} catch (Exception e) {
 			throw new RuntimeException("Internal Error", e);
 		}
 		if (visitChildren) {
 			for (Match match : node.getChildren())
-				visit(match);
+				process(match);
 		}
 
-		leave(node);
+		complete(node);
 		
 		return visitChildren; 
 	}
@@ -44,11 +45,16 @@ abstract public class AbstractProcessor implements MatchProcessor {
 	/**
 	 * Invoked after invoking the visit method and visiting all children nodes   
 	 */
-	public void leave(Match node) {
+	public void complete(Match node) {
+		if (_left.contains(node))
+			return;
+		_left.add(node);
+		
 		Method leaveMethod = ProcessorUtils.findLeaveMethod(this, node);
 		try {
-			leaveMethod.invoke(this, new Object[] { this });
+			leaveMethod.invoke(this, new Object[] { node });
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Internal Error", e);
 		}
 	}
@@ -79,7 +85,7 @@ abstract public class AbstractProcessor implements MatchProcessor {
 	public <T> T getResult(Match match) {
 		Object result= _results.get(match);
 		if (result == null && !_visited.contains(match)) {
-			visit(match);
+			process(match);
 			result= _results.get(match);
 		}
 		return (T) result;
