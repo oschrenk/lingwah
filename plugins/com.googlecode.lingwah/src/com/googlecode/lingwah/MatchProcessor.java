@@ -1,6 +1,12 @@
-package com.googlecode.lingwah.node;
+package com.googlecode.lingwah;
 
-public interface MatchVistor {
+/**
+ * An interface to be implemented by maych processor.
+ * The match processor is very much like a Visitor.
+ * 
+ * @author Ted Stockwell
+ */
+public interface MatchProcessor {
 	/**
 	 * Invoked when visiting a node in the tree
 	 * @return true if children of this node should be visited

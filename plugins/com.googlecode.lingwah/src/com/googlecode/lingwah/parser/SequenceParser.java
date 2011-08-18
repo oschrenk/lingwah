@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseError;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.Parsers;
-import com.googlecode.lingwah.node.Match;
 
 public class SequenceParser extends Parser {
 	private static class ResultsInfo {

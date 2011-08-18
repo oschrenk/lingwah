@@ -1,6 +1,8 @@
-package com.googlecode.lingwah.node;
+package com.googlecode.lingwah.util;
 
 import java.util.List;
+
+import com.googlecode.lingwah.Match;
 
 public class MatchUtils {
 	

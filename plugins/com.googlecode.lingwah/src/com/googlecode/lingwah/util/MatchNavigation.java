@@ -1,9 +1,10 @@
-package com.googlecode.lingwah.node;
+package com.googlecode.lingwah.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.parser.ParserReference;
 

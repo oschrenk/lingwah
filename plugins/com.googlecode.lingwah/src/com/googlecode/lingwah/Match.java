@@ -1,13 +1,12 @@
-package com.googlecode.lingwah.node;
+package com.googlecode.lingwah;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.googlecode.lingwah.ParseContext;
-import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.parser.ParserReference;
+import com.googlecode.lingwah.util.MatchNavigation;
+import com.googlecode.lingwah.util.MatchUtils;
 
 public class Match {
 	
@@ -125,29 +124,6 @@ public class Match {
 	@Override
 	public String toString() {
 		return MatchUtils.toXML(this);
-	}
-
-	public void accept(MatchVistor visitor) {
-
-		Method visitMethod = VisitorUtils.findVisitMethod(visitor, this);
-		Boolean visitChildren;
-		try {
-			visitChildren = (Boolean) visitMethod.invoke(visitor,
-					new Object[] { this });
-		} catch (Exception e) {
-			throw new RuntimeException("Internal Error", e);
-		}
-		if (visitChildren) {
-			for (Match node : children)
-				node.accept(visitor);
-		}
-
-		Method leaveMethod = VisitorUtils.findLeaveMethod(visitor, this);
-		try {
-			leaveMethod.invoke(visitor, new Object[] { this });
-		} catch (Exception e) {
-			throw new RuntimeException("Internal Error", e);
-		}
 	}
 
 	public Parser getParser() {

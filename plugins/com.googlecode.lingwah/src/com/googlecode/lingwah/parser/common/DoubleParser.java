@@ -2,11 +2,11 @@ package com.googlecode.lingwah.parser.common;
 
 
 import com.googlecode.lingwah.Document;
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseError;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.ParseResults.Listener;
-import com.googlecode.lingwah.node.Match;
 import com.googlecode.lingwah.parser.TerminalParser;
 
 public class DoubleParser

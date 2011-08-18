@@ -6,11 +6,11 @@ package com.googlecode.lingwah.parser;
 
 import java.util.Collection;
 
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseError;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
-import com.googlecode.lingwah.node.Match;
 
 /**
  * Like ChoiceParser, except it returns only the first match.

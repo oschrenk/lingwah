@@ -1,4 +1,6 @@
-package com.googlecode.lingwah.node;
+package com.googlecode.lingwah.util;
+
+import com.googlecode.lingwah.Match;
 
 /**
  * Denotes the type of syntax element that a node represents.
