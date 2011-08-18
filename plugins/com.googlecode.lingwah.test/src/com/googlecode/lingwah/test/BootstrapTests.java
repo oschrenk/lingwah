@@ -58,7 +58,7 @@ extends TestCase
 		parser= new StringParser("4-3"); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		// test a sequence
 		txt= "43";
@@ -66,7 +66,7 @@ extends TestCase
 		parser= seq(str("4"), str("3")); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		// test a choice
 		txt= "4";
@@ -83,7 +83,7 @@ extends TestCase
 		parser= choice(four, three); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		// test repetition
 		
@@ -92,14 +92,14 @@ extends TestCase
 		parser= rep(str("3")); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 
 		txt= "3";
 		ctx= new ParseContext(txt);
 		parser= opt(rep(str("3"))); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "43";
 		ctx= new ParseContext(txt);
@@ -116,19 +116,19 @@ extends TestCase
 		parser= new RepetitionParser(new ChoiceParser(new Parser[] { four, four }), false); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "4";
 		parser=seq(four, opt(four));
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "4";
 		Parser COMMA= new StringParser(",");
 		COMMA.setLabel("COMMA");
 		parser=seq(four, opt(rep(seq(opt(str("3")), COMMA, four, opt(str("3"))))));
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 
 		// optional sequences should produce a 'success' result and return one
 		// match of zero length
@@ -137,7 +137,7 @@ extends TestCase
 		parser= opt(rep(str("3"))); 
 		results= ctx.getParseResults(parser, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "4";
 		ctx= new ParseContext(txt);
@@ -150,19 +150,19 @@ extends TestCase
 		ctx= new ParseContext(txt);
 		results= ctx.getParseResults(opt(rep(choice(str(" "), str("\t")))), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "T";
 		ctx= new ParseContext(txt);
 		results= ctx.getParseResults(anyChar(), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 		txt= "T";
 		ctx= new ParseContext(txt);
 		results= ctx.getParseResults(excluding(anyChar(), four), 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 		
 	}
 	
@@ -173,7 +173,7 @@ extends TestCase
 		ParseContext ctx= new ParseContext(txt);
 		ParseResults results= ctx.getParseResults(ExprGrammar.INSTANCE.expr, 0); 
 		assertTrue(results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 	}
 	
 	public void testCalculator() throws Exception {
@@ -186,7 +186,7 @@ extends TestCase
 		ctx= new ParseContext(txt);
 		results= ctx.getParseResults(grammar.decimal, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
 
 		txt= "9*9";
 		ctx= new ParseContext(txt);
@@ -198,10 +198,16 @@ extends TestCase
 		ctx= new ParseContext(txt);
 		results= ctx.getParseResults(grammar.multiplication, 0); 
 		assertTrue(results.getErrorMessage(), results.success());
-		assertEquals(results.longestLength(), txt.length());
+		assertEquals(txt.length(), results.longestLength());
+		
+		txt= "(6543.56 - 1)/ /*Pi*/3.14159265";
+		ctx= new ParseContext(txt);
+		results= ctx.getParseResults(grammar.expr, 0); 
+		assertTrue(results.getErrorMessage(), results.success());
+		assertEquals(txt.length(), results.longestLength());
 
+		assertEquals(new BigDecimal("2082.5615313302951609592032881793"), Calculator.parse("(6543.56 - 1)/ /*Pi*/3.14159265"));
 		assertEquals(new BigDecimal("81"), Calculator.parse("9 * 9"));
-		assertEquals(new BigDecimal("2082.5615313302951609592032881793"), Calculator.parse("(6543.56 - 1)/ 3.14159265/*Pi*/"));
 	}
 	
 	

@@ -1,6 +1,7 @@
 package com.googlecode.lingwah.test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import com.googlecode.lingwah.AbstractProcessor;
@@ -35,7 +36,7 @@ public class CalculatorProcessor extends AbstractProcessor {
 		List<Match> children= expr.getChildrenByType(grammar.expr);
 		BigDecimal left= getResult(children.get(0));
 		BigDecimal right= getResult(children.get(1));
-		putResult(left.divide(right));
+		putResult(left.divide(right, 28, RoundingMode.HALF_UP));
 	}
 	public void completeGroup(Match expr) {
 		putResult(getResult(expr.getChildByType(grammar.expr)));

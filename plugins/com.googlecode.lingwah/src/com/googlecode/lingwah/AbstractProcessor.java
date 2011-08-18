@@ -24,22 +24,29 @@ abstract public class AbstractProcessor implements MatchProcessor {
 		if (_visited.contains(node))
 			return true;
 		_visited.add(node);
-		
-		Method visitMethod = ProcessorUtils.findVisitMethod(this, node);
-		Boolean visitChildren;
+		Match prevMatch= _currentMatch;
+		_currentMatch= node;
 		try {
-			visitChildren = (Boolean) visitMethod.invoke(this, new Object[] { node });
-		} catch (Exception e) {
-			throw new RuntimeException("Internal Error", e);
+			
+			Method visitMethod = ProcessorUtils.findVisitMethod(this, node);
+			Boolean visitChildren;
+			try {
+				visitChildren = (Boolean) visitMethod.invoke(this, new Object[] { node });
+			} catch (Exception e) {
+				throw new RuntimeException("Internal Error", e);
+			}
+			if (visitChildren) {
+				for (Match match : node.getChildren())
+					process(match);
+			}
+	
+			complete(node);
+			
+			return visitChildren;
 		}
-		if (visitChildren) {
-			for (Match match : node.getChildren())
-				process(match);
+		finally {
+			_currentMatch= prevMatch;
 		}
-
-		complete(node);
-		
-		return visitChildren; 
 	}
 	
 	/**
@@ -50,12 +57,20 @@ abstract public class AbstractProcessor implements MatchProcessor {
 			return;
 		_left.add(node);
 		
-		Method leaveMethod = ProcessorUtils.findLeaveMethod(this, node);
+		Match prevMatch= _currentMatch;
+		_currentMatch= node;
 		try {
-			leaveMethod.invoke(this, new Object[] { node });
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Internal Error", e);
+			
+			Method leaveMethod = ProcessorUtils.findLeaveMethod(this, node);
+			try {
+				leaveMethod.invoke(this, new Object[] { node });
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException("Internal Error", e);
+			}
+		}
+		finally {
+			_currentMatch= prevMatch;
 		}
 	}
 	
