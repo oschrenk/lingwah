@@ -9,11 +9,11 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
-import com.googlecode.lingwah.node.Match;
-import com.googlecode.lingwah.node.MatchNavigation;
+import com.googlecode.lingwah.util.MatchNavigation;
 
 public class MeteorDescriptionLanguageTests
 extends TestCase

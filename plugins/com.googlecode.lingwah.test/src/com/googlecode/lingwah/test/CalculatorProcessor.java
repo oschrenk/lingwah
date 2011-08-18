@@ -3,13 +3,13 @@ package com.googlecode.lingwah.test;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.googlecode.lingwah.AbstractProcessor;
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.annotations.Processes;
-import com.googlecode.lingwah.node.AbstractVisitor;
-import com.googlecode.lingwah.node.Match;
 
 @Processes(CalculatorGrammar.class)
-public class CalculatorProcessor extends AbstractVisitor {
+public class CalculatorProcessor extends AbstractProcessor {
 	
 	static final CalculatorGrammar grammar= CalculatorGrammar.INSTANCE;
 	BigDecimal _result;

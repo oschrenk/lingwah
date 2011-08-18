@@ -13,6 +13,6 @@ public class Calculator {
 		ParseResults parseResults= ParseContext.parse(PARSER, expression);
 		if (!parseResults.success())
 			throw parseResults.getError();
-		return new CalculatorProcessor().process(parseResults.getLongestMatch());
+		return CalculatorProcessor.process(parseResults.getLongestMatch());
 	}
 }

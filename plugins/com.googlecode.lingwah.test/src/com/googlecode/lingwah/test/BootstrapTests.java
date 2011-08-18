@@ -9,21 +9,22 @@ import static com.googlecode.lingwah.Parsers.rep;
 import static com.googlecode.lingwah.Parsers.seq;
 import static com.googlecode.lingwah.Parsers.str;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import com.googlecode.lingwah.Grammar;
+import com.googlecode.lingwah.Match;
 import com.googlecode.lingwah.ParseContext;
 import com.googlecode.lingwah.ParseResults;
 import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.Parsers;
-import com.googlecode.lingwah.node.Match;
-import com.googlecode.lingwah.node.MatchNavigation;
 import com.googlecode.lingwah.parser.ChoiceParser;
 import com.googlecode.lingwah.parser.RepetitionParser;
 import com.googlecode.lingwah.parser.StringParser;
+import com.googlecode.lingwah.util.MatchNavigation;
 
 public class BootstrapTests
 extends TestCase
@@ -174,5 +175,11 @@ extends TestCase
 		assertTrue(results.success());
 		assertEquals(results.longestLength(), txt.length());
 	}
+	
+	public void testCalculator() throws Exception {
+		assertEquals(new BigDecimal("81"), Calculator.parse("9 * 9"));
+		assertEquals(new BigDecimal("2082.5615313302951609592032881793"), Calculator.parse("(6543.56 - 1)/ 3.14159265/*Pi*/"));
+	}
+	
 	
 }
