@@ -9,7 +9,6 @@ Export-Package: com.googlecode.lingwah,
  com.googlecode.lingwah.annotations,
  com.googlecode.lingwah.exception,
  com.googlecode.lingwah.grammars,
- com.googlecode.lingwah.node,
  com.googlecode.lingwah.parser,
  com.googlecode.lingwah.parser.common,
  com.googlecode.lingwah.util
