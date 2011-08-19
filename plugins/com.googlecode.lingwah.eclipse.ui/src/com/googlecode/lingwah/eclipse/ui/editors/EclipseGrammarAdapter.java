@@ -1,5 +1,7 @@
 package com.googlecode.lingwah.eclipse.ui.editors;
 
+import java.util.List;
+
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
@@ -8,13 +10,21 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.source.ISourceViewer;
 
 import com.googlecode.lingwah.Grammar;
+import com.googlecode.lingwah.Parser;
 
 public class EclipseGrammarAdapter {
 	private Grammar _grammar;
 	private ColorManager _colorManager= new ColorManager();
+	private String[] _contentTypes;
 	
 	EclipseGrammarAdapter(Grammar grammar) {
 		_grammar= grammar;
+		List<Parser> parsers= grammar.getDeclaredParsers();
+		_contentTypes= new String[parsers.size()+1];
+		int i= 0;
+		_contentTypes[i++]= IDocument.DEFAULT_CONTENT_TYPE;
+		for (Parser parser:parsers)
+			_contentTypes[i++]= parser.getLabel();
 	}
 	
 	public Grammar getGrammar() {
@@ -23,8 +33,7 @@ public class EclipseGrammarAdapter {
 	
 
 	public String[] getContentTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return _contentTypes;
 	}
 
 	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {

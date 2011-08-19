@@ -4,16 +4,17 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.*;
 
 import com.googlecode.lingwah.Grammar;
+import com.googlecode.lingwah.ParseContext;
 
 public class LingwahPartitionScanner 
 implements IPartitionTokenScanner 
 {
 	private EclipseGrammarAdapter _grammar;
-	private IDocument _document;
+	private ParseContext _parseContext;
 
-	public LingwahPartitionScanner(IDocument document, EclipseGrammarAdapter grammar) {
+	public LingwahPartitionScanner(ParseContext parseContext, EclipseGrammarAdapter grammar) {
 		_grammar= grammar;
-		_document= document;
+		_parseContext= parseContext;
 	}
 
 	@Override
