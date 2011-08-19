@@ -1,6 +1,5 @@
 package com.googlecode.lingwah;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import com.googlecode.lingwah.parser.ParserReference;
 import com.googlecode.lingwah.util.MatchNavigation;
 import com.googlecode.lingwah.util.MatchUtils;
-import com.googlecode.lingwah.util.ProcessorUtils;
 
 public class Match {
 	
@@ -217,28 +215,26 @@ public class Match {
 		return MatchNavigation.findChildrenByType(this, parser);
 	}
 	
+	public Match getFirstChild() {
+		if (children == null || children.isEmpty())
+			return null;
+		return children.get(0);
+	}
+	
+	public Match getLastChild() {
+		if (children == null || children.isEmpty())
+			return null;
+		return children.get(children.size()-1);
+	}
+	
 
 	public void accept(MatchProcessor visitor) {
-
-		Method visitMethod = ProcessorUtils.findVisitMethod(visitor, this);
-		Boolean visitChildren;
-		try {
-			visitChildren = (Boolean) visitMethod.invoke(visitor,
-					new Object[] { this });
-		} catch (Exception e) {
-			throw new RuntimeException("Internal Error", e);
-		}
+		boolean visitChildren= visitor.process(this);
 		if (visitChildren) {
-			for (Match node : children)
+			for (Match node : getChildren())
 				node.accept(visitor);
 		}
-
-		Method leaveMethod = ProcessorUtils.findLeaveMethod(visitor, this);
-		try {
-			leaveMethod.invoke(visitor, new Object[] { this });
-		} catch (Exception e) {
-			throw new RuntimeException("Internal Error", e);
-		}
+		visitor.complete(this);
 	}
 	
 	

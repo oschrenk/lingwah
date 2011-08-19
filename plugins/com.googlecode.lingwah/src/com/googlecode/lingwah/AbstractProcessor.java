@@ -1,5 +1,6 @@
 package com.googlecode.lingwah;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,34 +16,28 @@ abstract public class AbstractProcessor implements MatchProcessor {
 
 	private HashMap<Match, Object> _results= new HashMap<Match, Object>();
 	private HashSet<Match> _visited= new HashSet<Match>();
-	private HashSet<Match> _left= new HashSet<Match>();
+	private HashSet<Match> _completed= new HashSet<Match>();
 	private Match _currentMatch;
 	
 	
 	public boolean process(Match node) {
-		
+
 		if (_visited.contains(node))
 			return true;
 		_visited.add(node);
 		Match prevMatch= _currentMatch;
 		_currentMatch= node;
+		Method visitMethod = ProcessorUtils.findVisitMethod(this, node);
 		try {
-			
-			Method visitMethod = ProcessorUtils.findVisitMethod(this, node);
-			Boolean visitChildren;
-			try {
-				visitChildren = (Boolean) visitMethod.invoke(this, new Object[] { node });
-			} catch (Exception e) {
-				throw new RuntimeException("Internal Error", e);
-			}
-			if (visitChildren) {
-				for (Match match : node.getChildren())
-					process(match);
-			}
-	
-			complete(node);
-			
+			Boolean visitChildren= (Boolean) visitMethod.invoke(this, new Object[] { node });
 			return visitChildren;
+			
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Error invoking method '"+visitMethod.getName()+"'", e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Error invoking method '"+visitMethod.getName()+"'", e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException("Error invoking method '"+visitMethod.getName()+"'", e);
 		}
 		finally {
 			_currentMatch= prevMatch;
@@ -53,21 +48,21 @@ abstract public class AbstractProcessor implements MatchProcessor {
 	 * Invoked after invoking the visit method and visiting all children nodes   
 	 */
 	public void complete(Match node) {
-		if (_left.contains(node))
+		if (_completed.contains(node))
 			return;
-		_left.add(node);
-		
+		_completed.add(node);
+
 		Match prevMatch= _currentMatch;
 		_currentMatch= node;
+		Method leaveMethod = ProcessorUtils.findLeaveMethod(this, node);
 		try {
-			
-			Method leaveMethod = ProcessorUtils.findLeaveMethod(this, node);
-			try {
-				leaveMethod.invoke(this, new Object[] { node });
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException("Internal Error", e);
-			}
+			leaveMethod.invoke(this, new Object[] { node });
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException("Error invoking method '"+leaveMethod.getName()+"'", e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException("Error invoking method '"+leaveMethod.getName()+"'", e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException("Error invoking method '"+leaveMethod.getName()+"'", e);
 		}
 		finally {
 			_currentMatch= prevMatch;
@@ -100,7 +95,7 @@ abstract public class AbstractProcessor implements MatchProcessor {
 	public <T> T getResult(Match match) {
 		Object result= _results.get(match);
 		if (result == null && !_visited.contains(match)) {
-			process(match);
+			match.accept(this);
 			result= _results.get(match);
 		}
 		return (T) result;
