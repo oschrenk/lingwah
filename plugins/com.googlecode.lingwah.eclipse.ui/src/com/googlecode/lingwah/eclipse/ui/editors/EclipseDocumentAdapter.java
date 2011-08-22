@@ -1,60 +1,78 @@
 package com.googlecode.lingwah.eclipse.ui.editors;
 
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 
 import com.googlecode.lingwah.Document;
 
 public class EclipseDocumentAdapter implements Document {
 	
 	private IDocument _document;
+	private FindReplaceDocumentAdapter _findReplaceAdapter; 
+	
 
 	public EclipseDocumentAdapter(IDocument document) {
-		// TODO Auto-generated constructor stub
+		_document= document;
+		_findReplaceAdapter= new FindReplaceDocumentAdapter(document);
 	}
 
 	@Override
 	public String substring(int start, int end) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return _document.get(start, end - start);
+		} catch (BadLocationException e) {
+			throw new StringIndexOutOfBoundsException(e.getMessage());
+		}
 	}
 
 	@Override
 	public String substring(int start) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return _document.get(start, _document.getLength() - start);
+		} catch (BadLocationException e) {
+			throw new StringIndexOutOfBoundsException(e.getMessage());
+		}
 	}
 
 	@Override
 	public int length() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _document.getLength();
 	}
 
 	@Override
 	public char charAt(int i) {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return _document.getChar(i);
+		} catch (BadLocationException e) {
+			throw new StringIndexOutOfBoundsException(e.getMessage());
+		}
 	}
 
 	@Override
-	public int indexOf(char startChar, int i) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int indexOf(int ch, int fromIndex) {
+		return indexOf(""+ch, fromIndex);
 	}
 
 	@Override
-	public boolean startsWith(String _beginMarker, int start) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean startsWith(String prefix, int toffset) {
+		return substring(toffset).equals(prefix);
 	}
 
 	@Override
-	public int indexOf(String _endMarker, int i) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int indexOf(String target, int fromIndex) {
+		try {
+			IRegion region= _findReplaceAdapter.find(fromIndex, target, true, true, false, false);
+			if (region == null)
+				return -1;
+			return region.getOffset();
+		} catch (BadLocationException e) {
+			throw new StringIndexOutOfBoundsException(e.getMessage());
+		}
 	}
 	
-	public IDocument getDocument() {
+	public IDocument getEclipseDocument() {
 		return _document;
 	}
 
