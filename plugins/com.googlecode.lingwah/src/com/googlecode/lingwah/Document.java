@@ -15,12 +15,12 @@ public interface Document {
 
 	public int length();
 
-	public char charAt(int i);
+	public char charAt(int index);
 
-	public int indexOf(char startChar, int i);
+	public int indexOf(int ch, int fromIndex);
 
-	public boolean startsWith(String _beginMarker, int start);
+	public boolean startsWith(String prefix, int offset);
 
-	public int indexOf(String _endMarker, int i);
+	public int indexOf(String str, int fromIndex);
 
 }

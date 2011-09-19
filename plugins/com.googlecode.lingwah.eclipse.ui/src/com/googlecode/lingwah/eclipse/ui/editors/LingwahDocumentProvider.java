@@ -6,9 +6,6 @@ import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import com.googlecode.lingwah.Document;
-import com.googlecode.lingwah.ParseContext;
-
 public class LingwahDocumentProvider extends FileDocumentProvider {
 	
 	private EclipseGrammarAdapter _grammar;
@@ -19,9 +16,8 @@ public class LingwahDocumentProvider extends FileDocumentProvider {
 	protected IDocument createDocument(Object element) throws CoreException {
 		IDocument document = super.createDocument(element);
 		if (document != null) {
-			Document lingwahDocument= new EclipseDocumentAdapter(document); 
-			ParseContext parseContext= new ParseContext(lingwahDocument);
-			LingwahPartitionScanner scanner= new LingwahPartitionScanner(parseContext, _grammar);
+			EclipseDocumentAdapter lingwahDocument= new EclipseDocumentAdapter(document, _grammar); 
+			LingwahPartitionScanner scanner= new LingwahPartitionScanner(lingwahDocument);
 			IDocumentPartitioner partitioner =
 				new FastPartitioner(scanner, _grammar.getContentTypes());
 			partitioner.connect(document);

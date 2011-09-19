@@ -17,7 +17,7 @@ public class CalculatorGrammar extends Grammar {
 	public final Parser division = seq(expr, str('/'), expr).separatedBy(opt(ws));
 	public final Parser group = seq(str('('), expr, str(')')).separatedBy(opt(ws));
 	{
-		expr.set(cho(decimal, addition, subtraction, multiplication, division, group));
+		expr.set(cho(decimal, first(multiplication, division, addition, subtraction), group));
 	}
 	
 	private CalculatorGrammar() {

@@ -6,16 +6,22 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 
 import com.googlecode.lingwah.Document;
+import com.googlecode.lingwah.ParseContext;
 
 public class EclipseDocumentAdapter implements Document {
 	
 	private IDocument _document;
-	private FindReplaceDocumentAdapter _findReplaceAdapter; 
+	private FindReplaceDocumentAdapter _findReplaceAdapter;
+	private EclipseGrammarAdapter _grammar;
+	private ParseContext _parseContext;
+
 	
 
-	public EclipseDocumentAdapter(IDocument document) {
+	public EclipseDocumentAdapter(IDocument document, EclipseGrammarAdapter grammar) {
 		_document= document;
+		_grammar= grammar;
 		_findReplaceAdapter= new FindReplaceDocumentAdapter(document);
+		_parseContext= new ParseContext(this);
 	}
 
 	@Override
@@ -74,6 +80,14 @@ public class EclipseDocumentAdapter implements Document {
 	
 	public IDocument getEclipseDocument() {
 		return _document;
+	}
+
+	public EclipseGrammarAdapter getGrammar() {
+		return _grammar;
+	}
+	
+	public ParseContext getParseContext() {
+		return _parseContext;
 	}
 
 }
