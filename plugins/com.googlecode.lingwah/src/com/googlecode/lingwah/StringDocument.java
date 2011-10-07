@@ -29,7 +29,7 @@ public class StringDocument implements Document {
 	}
 
 	@Override
-	public int indexOf(char startChar, int i) {
+	public int indexOf(int startChar, int i) {
 		return _document.indexOf(startChar, i);
 	}
 

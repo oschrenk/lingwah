@@ -38,6 +38,9 @@ public class CalculatorProcessor extends AbstractProcessor {
 		BigDecimal right= getResult(children.get(1));
 		putResult(left.divide(right, 28, RoundingMode.HALF_UP));
 	}
+	public void completeOperator(Match op) {
+		putResult(getResult(op.getChildren().get(0)));
+	}
 	public void completeGroup(Match expr) {
 		putResult(getResult(expr.getChildByType(grammar.expr)));
 	}

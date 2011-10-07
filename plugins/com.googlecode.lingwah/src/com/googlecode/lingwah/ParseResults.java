@@ -180,14 +180,17 @@ public class ParseResults {
 		_properties.put(parser, info);
 	}
 	public <T> void putMatcherInfo(T info) {
-		_properties.put(getMatcher(), info);
+		putMatcherInfo(getMatcher(), info);
 	}
 
 
 
 	public String getErrorMessage() {
-		if (_error == null)
-			return null;
+		if (_error == null) {
+			if (_matches == null || _matches.isEmpty())
+				return "No matches found";
+			return "";
+		}
 		return _error.errorMsg;
 	}
 

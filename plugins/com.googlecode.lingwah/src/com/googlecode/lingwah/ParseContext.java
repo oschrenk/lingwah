@@ -69,10 +69,14 @@ public class ParseContext {
 	 * This method is used to perform matches.
 	 */
 	public ParseResults doMatch(Parser parser, int start) {
+		
+		// if the given parser has already been invoked at the given position 
+		// then just return the current results.  
 		ParseResults entry= getCachedResults(parser, start);
 		if (entry != null) 
 			return entry;
 
+		// create new results for the parser invocation 
 		entry = new ParseResults(this, parser, start);
 		cacheMatchResults(entry);
 		_callStack.add(entry);
@@ -152,7 +156,9 @@ public class ParseContext {
 	 */
 	public ParseResults getParseResults(Parser parser, int start) {
 		doMatch(parser, start);
-		return getCachedResults(parser, start);
+		ParseResults parseResults= getCachedResults(parser, start);
+		assert parseResults != null;
+		return parseResults;
 	}
 	
 }
