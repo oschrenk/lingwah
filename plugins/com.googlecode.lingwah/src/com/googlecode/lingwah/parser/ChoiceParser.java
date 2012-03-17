@@ -19,7 +19,7 @@ public class ChoiceParser extends Parser
 {
 	protected final ArrayList<Parser> parsers= new ArrayList<Parser>();
 	
-	public ChoiceParser(Parser[] matchers)
+	public ChoiceParser(Parser... matchers)
 	{
 		for (Parser parser:matchers)
 			this.parsers.add(parser);
