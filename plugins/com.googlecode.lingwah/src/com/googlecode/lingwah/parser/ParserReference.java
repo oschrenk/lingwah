@@ -18,7 +18,7 @@ public class ParserReference extends Parser
 		_definition= definition;
 	}
 
-	public ParserReference set(Parser definition)
+	public ParserReference define(Parser definition)
 	{
 		this._definition = definition;
 		return this;

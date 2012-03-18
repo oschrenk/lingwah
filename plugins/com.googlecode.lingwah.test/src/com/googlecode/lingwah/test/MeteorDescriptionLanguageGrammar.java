@@ -97,7 +97,7 @@ public class MeteorDescriptionLanguageGrammar extends Grammar
 	public final ParserReference blockBody= ref(rep(seq(propertyValuePair, optws, str(";"))));
 	public final Parser block= seq(blockType, optws, str("{"), optws, blockBody, optws, str("}"));
 	{
-		blockBody.set(seq(cho(block, blockBody.getDefinition()), opt(rep(seq(optws, cho(block, blockBody.getDefinition())))))); // blocks can be nested
+		blockBody.define(seq(cho(block, blockBody.getDefinition()), opt(rep(seq(optws, cho(block, blockBody.getDefinition())))))); // blocks can be nested
 	}
 		
 	public final Parser statement= seq(cho(directive, triple, block));

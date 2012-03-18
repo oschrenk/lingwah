@@ -38,7 +38,7 @@ public class SimpleScalaGrammar extends Grammar {
 	public final Parser program = rep(clazz);
 		 
 	{
-		expr.set(seq(factor, opt(rep(choice(seq(str("+"), factor), seq(str("-"), factor))))));
+		expr.define(seq(factor, opt(rep(choice(seq(str("+"), factor), seq(str("-"), factor))))));
 	}
 	
 	public SimpleScalaGrammar() {

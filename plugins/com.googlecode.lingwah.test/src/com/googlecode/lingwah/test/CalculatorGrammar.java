@@ -18,7 +18,7 @@ public class CalculatorGrammar extends Grammar {
 	public final Parser operator = first(multiplication, division, addition, subtraction);
 	public final Parser group = seq(str('('), expr, str(')')).separatedBy(opt(ws));
 	{
-		expr.set(cho(decimal, operator, group));
+		expr.define(cho(decimal, operator, group));
 	}
 	
 	private CalculatorGrammar() {
