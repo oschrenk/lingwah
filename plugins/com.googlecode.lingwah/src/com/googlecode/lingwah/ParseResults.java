@@ -148,7 +148,7 @@ public class ParseResults {
 				return;
 		if (!_matches.contains(match)) {
 			_matches.add(match);
-			for (Listener listener:_listeners) {
+			for (Listener listener:new HashSet<Listener>(_listeners)) {
 				listener.onMatchFound(this, match);
 			}
 		}
@@ -158,7 +158,7 @@ public class ParseResults {
 		// if no matches are found then the error will be send to listeners
 		if (_error == null || error.position < _error.position)
 			_error= error;
-		for (Listener listener:_listeners) {
+		for (Listener listener:new HashSet<Listener>(_listeners)) {
 			listener.onMatchError(this, _error);
 		}
 	}
