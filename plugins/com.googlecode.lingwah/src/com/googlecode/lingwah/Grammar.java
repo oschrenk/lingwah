@@ -26,6 +26,9 @@ public class Grammar {
 	final protected ParserReference ref(Parser definition) {
 		return Parsers.ref(definition);
 	}
+	final protected ParserReference sameAs(Parser definition) {
+		return Parsers.ref(definition);
+	}
 
 	protected StringParser string(final String string) {
 		return Parsers.string(string);

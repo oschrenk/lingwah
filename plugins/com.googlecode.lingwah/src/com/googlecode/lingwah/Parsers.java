@@ -128,6 +128,9 @@ public final class Parsers
 	public static ParserReference ref(Parser definition) {
 		return new ParserReference(definition);
 	}
+	public static ParserReference sameAs(Parser definition) {
+		return new ParserReference(definition);
+	}
 
 	public static Parser regex(String expression) {
 		return new RegularExpressionParser(expression);
