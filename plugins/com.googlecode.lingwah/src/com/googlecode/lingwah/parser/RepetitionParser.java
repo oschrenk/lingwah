@@ -84,10 +84,13 @@ public final class RepetitionParser extends Parser
 		return Arrays.asList(new Parser[] { _matcher });
 	}
 	
-	public SequenceParser separatedBy(Parser separator) {
-		return Parsers.seq(_matcher, Parsers.opt(Parsers.rep(Parsers.seq(separator, _matcher))));
+	public Parser separatedBy(Parser separator) {
+		Parser parser= Parsers.seq(_matcher, Parsers.opt(Parsers.rep(Parsers.seq(separator, _matcher))));
+		if (_isOptional)
+			parser= Parsers.opt(parser);
+		return parser;
 	}
-	public final SequenceParser sep(Parser separator) {
+	public final Parser sep(Parser separator) {
 		return separatedBy(separator);
 	}
 
