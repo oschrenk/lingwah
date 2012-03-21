@@ -12,14 +12,6 @@ import com.googlecode.lingwah.Parser;
 import com.googlecode.lingwah.Parsers;
 
 public class SequenceParser extends Parser {
-	private static class ResultsInfo {
-		ParseError error;
-		public void collectErrorInfo(ParseError e) {
-			if (error == null || error.position < e.position)
-				error= e;
-		}
-	}
-	
 	private final Parser[] _parsers;
 	private final Parser _tailMatcher;
 
@@ -49,9 +41,6 @@ public class SequenceParser extends Parser {
 			return;
 		}
 		
-		final ResultsInfo info= new ResultsInfo();
-		targetResults.putMatcherInfo(info);
-		
 		ParseResults headResults= ctx.doMatch(_parsers[0], start);
 		if (_parsers.length <= 1) {
 			headResults.addListener(new ParseResults.Listener() {
@@ -64,8 +53,7 @@ public class SequenceParser extends Parser {
 				
 				@Override
 				public void onMatchError(ParseResults parseResults, ParseError error) {
-					ResultsInfo info= targetResults.getMatcherInfo();
-					info.collectErrorInfo(error);
+					targetResults.setError(error);
 				}
 			});
 			return;
@@ -87,16 +75,14 @@ public class SequenceParser extends Parser {
 					
 					@Override
 					public void onMatchError(ParseResults results, ParseError parseError) {
-						ResultsInfo info= targetResults.getMatcherInfo();
-						info.collectErrorInfo(parseError);
+						targetResults.setError(parseError);
 					}
 				});
 			}
 
 			@Override
 			public void onMatchError(ParseResults results, ParseError parseError) {
-				ResultsInfo info= targetResults.getMatcherInfo();
-				info.collectErrorInfo(parseError);
+				targetResults.setError(parseError);
 			}
 		});
 	}
@@ -106,16 +92,6 @@ public class SequenceParser extends Parser {
 		return Arrays.asList(_parsers);
 	}
 
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// set error if no matches found
-		if (parseResults.getMatches().isEmpty()) {
-			ResultsInfo info= parseResults.getMatcherInfo();
-			if (info.error != null)
-				parseResults.setError(info.error);
-		}
-	}
-	
 	public SequenceParser separatedBy(Parser separator) {
 		
 		if (_parsers.length <= 1)

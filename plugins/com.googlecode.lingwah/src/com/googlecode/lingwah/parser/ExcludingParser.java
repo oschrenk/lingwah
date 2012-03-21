@@ -65,12 +65,6 @@ public final class ExcludingParser extends Parser
 			}
 		});
 	}
-
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@Override
 	public List<Parser> getDependencies() {

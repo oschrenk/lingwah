@@ -41,11 +41,6 @@ public class ParserReference extends Parser
 	}
 
 	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		_definition.completeMatching(ctx, start, parseResults);
-	}
-
-	@Override
 	public List<Parser> getDependencies() {
 		return _definition.getDependencies();
 	}

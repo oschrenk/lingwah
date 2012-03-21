@@ -19,6 +19,25 @@ public class ChoiceParser extends Parser
 {
 	protected final ArrayList<Parser> parsers= new ArrayList<Parser>();
 	
+	/**
+	 * Just like ParseResults but when saving errors this class 
+	 * saves the error that occurs latest in the input instead of the 
+	 * earliest occurring error. 
+	 */
+	public static class ChoiceResults extends ParseResults {
+
+		public ChoiceResults(ParseContext ctx, Parser parser, int position) {
+			super(ctx, parser, position);
+		}
+		
+		@Override
+		protected void saveError(ParseError error) {
+			if (_error == null || _error.position < error.position) 
+				_error= error;
+		}
+		
+	}
+	
 	public ChoiceParser(Parser... matchers)
 	{
 		for (Parser parser:matchers)
@@ -31,6 +50,11 @@ public class ChoiceParser extends Parser
 	}
 	public ChoiceParser()
 	{
+	}
+	
+	@Override
+	public ParseResults createResults(ParseContext parseContext, int start) {
+		return new ChoiceResults(parseContext, this, start);
 	}
 	
 	@Override
@@ -47,12 +71,7 @@ public class ChoiceParser extends Parser
 		return label;
 	}
 	
-	protected static class ResultsInfo {
-		final ArrayList<ParseResults> results= new ArrayList<ParseResults>();
-		final ArrayList<ParseError> errors= new ArrayList<ParseError>();
-	}
 
-	
 	@Override
 	public void startMatching(final ParseContext ctx, final int start, final ParseResults targetResults) {
 		
@@ -61,53 +80,22 @@ public class ChoiceParser extends Parser
 			return;
 		}
 		
-		final ResultsInfo info= new ResultsInfo();
-		targetResults.putMatcherInfo(this, info);
-		
-		ParseResults.Listener listener= new ParseResults.Listener() {
-			@Override
-			public void onMatchFound(ParseResults results, Match node) {
-				targetResults.addMatch(node);
-			}
-
-			@Override
-			public void onMatchError(ParseResults results, ParseError parseError) {
-				if (info.results.size() <= 1) {
-					// if only a single result set is wrapped then we can set the 
-					// error immediately
-					targetResults.setError(parseError); 
-				}
-				else
-					info.errors.add(parseError);
-			}
-		};
-		
 		for (int i= 0; i < parsers.size(); i++)  {
 			ParseResults m= ctx.doMatch(parsers.get(i), start);
-			m.addListener(listener);
-			info.results.add(m);
-		}
-	}
-	
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		final ResultsInfo info= parseResults.getMatcherInfo(this);
-		/*
-		 * If no results found then return the latest occurring error
-		 * among all the choices. 
-		 */
-		if (parseResults.getMatches().isEmpty()) {
-			ParseError error= null;
-			for (ParseError e:info.errors) {
-				if (error == null || error.position < e.position)
-					error= e;
-			}
-			if (error != null)
-				parseResults.setError(error);
-		}
-	}
-	
+			m.addListener(new ParseResults.Listener() {
+				@Override
+				public void onMatchFound(ParseResults results, Match node) {
+					targetResults.addMatch(node);
+				}
 
+				@Override
+				public void onMatchError(ParseResults results, ParseError parseError) {
+					targetResults.setError(parseError); 
+				}
+			});
+		}
+	}
+	
 	public void addChoice(Parser parser) {
 		this.parsers.add(parser);
 	}

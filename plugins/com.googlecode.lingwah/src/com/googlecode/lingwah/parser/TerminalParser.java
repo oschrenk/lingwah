@@ -22,10 +22,4 @@ abstract public class TerminalParser extends Parser {
 	public boolean isRecursive() {
 		return false;
 	}
-	
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// nothing to do
-		
-	}
 }

@@ -15,12 +15,12 @@ public abstract class Parser
 	 * This method is used by ParseContext.   
 	 */
 	abstract public void startMatching(ParseContext ctx, int start, ParseResults parseResults);
-	/**
-	 * Do not call this method directly, use the ParseContext.doMatch method
-	 * to perform parsing.
-	 * This method is used by ParseContext.   
-	 */
-	abstract public void completeMatching(ParseContext ctx, int start, ParseResults parseResults);
+//	/**
+//	 * Do not call this method directly, use the ParseContext.doMatch method
+//	 * to perform parsing.
+//	 * This method is used by ParseContext.   
+//	 */
+//	abstract public void completeMatching(ParseContext ctx, int start, ParseResults parseResults);
 	
 	/**
 	 * Returns a list of other Matchers that are used by this Parser.
@@ -92,6 +92,19 @@ public abstract class Parser
 	
 	public Parser excluding(Parser...filters) {
 		return Parsers.excluding(this, filters);
+	}
+
+	/**
+	 * Creates an appropriate results object for recording the results of this matcher.
+	 * The returned results object may use different strategies for recording results, depending 
+	 * on the type of matching being done by this parser.
+	 *  
+	 * This method is called by ParseContext.
+	 * The ParseResults object returned by this method will be passed into 
+	 * to the Parser.startMatching method.
+	 */
+	public ParseResults createResults(ParseContext parseContext, int start) {
+		return new ParseResults(parseContext, this, start);
 	}
 	
 }

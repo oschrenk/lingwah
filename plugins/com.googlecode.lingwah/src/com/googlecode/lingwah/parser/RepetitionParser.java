@@ -72,12 +72,6 @@ public final class RepetitionParser extends Parser
 		
 		ctx.doMatch(_matcher, start).addListener(new RepetitionListener(null));
 	}
-
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// nothing to do
-		
-	}
 	
 	@Override
 	public List<Parser> getDependencies() {

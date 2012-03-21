@@ -42,9 +42,4 @@ public final class RegularExpressionParser extends TerminalParser
 		parseResults.addMatch(start + m.end());
 	}
 
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// nothign to do
-		
-	}
 }

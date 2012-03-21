@@ -77,7 +77,7 @@ public class ParseContext {
 			return entry;
 
 		// create new results for the parser invocation 
-		entry = new ParseResults(this, parser, start);
+		entry = parser.createResults(this, start);
 		cacheMatchResults(entry);
 		_callStack.add(entry);
 		

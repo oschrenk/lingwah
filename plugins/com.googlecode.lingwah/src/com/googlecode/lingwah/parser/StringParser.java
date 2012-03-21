@@ -41,9 +41,4 @@ public final class StringParser extends TerminalParser
 			parseResults.setError("Expected '"+_target+"'", start + i);
 	}
 
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// nothign to do
-		
-	}
 }

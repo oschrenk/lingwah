@@ -46,10 +46,4 @@ public class OptionalParser extends Parser {
 			}
 		});
 	}
-
-	@Override
-	public void completeMatching(ParseContext ctx, int start, ParseResults parseResults) {
-		// nothing to do
-		
-	}
 }

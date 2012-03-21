@@ -3,7 +3,6 @@ package com.googlecode.lingwah;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -55,9 +54,8 @@ public class ParseResults {
 	private final Parser _matcher;
 	private final int _position; 
 	private List<Match> _matches;
-	private ParseError _error;
+	protected ParseError _error;
 	private HashSet<Listener> _listeners= new HashSet<Listener>();
-	private HashMap<Parser, Object> _properties= new HashMap<Parser, Object>();
 
 	public ParseResults(ParseContext ctx, Parser parser, int position) {
 		_ctx= ctx;
@@ -83,7 +81,7 @@ public class ParseResults {
 	
 	
 	public boolean success() {
-		return _error == null && _matches != null && !_matches.isEmpty();
+		return _matches != null && !_matches.isEmpty();
 	}
 	
 	public List<Match> getMatches() {
@@ -156,11 +154,14 @@ public class ParseResults {
 	public void setError(ParseError error) {
 		// just save the error.
 		// if no matches are found then the error will be send to listeners
-		if (_error == null || error.position < _error.position)
-			_error= error;
+		saveError(error);
 		for (Listener listener:new HashSet<Listener>(_listeners)) {
-			listener.onMatchError(this, _error);
+			listener.onMatchError(this, error);
 		}
+	}
+	protected void saveError(ParseError error) {
+		if (_error == null || error.position < _error.position) 
+			_error= error;
 	}
 	
 	public ParseError getError() {
@@ -169,22 +170,6 @@ public class ParseResults {
 	
 	public ParseContext getContext() { return _ctx; }
 	
-	@SuppressWarnings("unchecked")
-	public <T> T getMatcherInfo(Parser parser) {
-		return (T) _properties.get(parser);
-	}
-	public <T> T getMatcherInfo() {
-		return getMatcherInfo(getMatcher());
-	}
-	public <T> void putMatcherInfo(Parser parser, T info) {
-		_properties.put(parser, info);
-	}
-	public <T> void putMatcherInfo(T info) {
-		putMatcherInfo(getMatcher(), info);
-	}
-
-
-
 	public String getErrorMessage() {
 		if (_error == null) {
 			if (_matches == null || _matches.isEmpty())
@@ -192,6 +177,12 @@ public class ParseResults {
 			return "";
 		}
 		return _error.errorMsg;
+	}
+	public String getErrorPosition() {
+		if (_error == null) {
+			return "unknown";
+		}
+		return ""+_error.position;
 	}
 
 	public Match getLongestMatch() {
