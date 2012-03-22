@@ -52,10 +52,10 @@ public class ChoiceParser extends Parser
 	{
 	}
 	
-	@Override
-	public ParseResults createResults(ParseContext parseContext, int start) {
-		return new ChoiceResults(parseContext, this, start);
-	}
+//	@Override
+//	public ParseResults createResults(ParseContext parseContext, int start) {
+//		return new ChoiceResults(parseContext, this, start);
+//	}
 	
 	@Override
 	public String getDefaultLabel() {

@@ -56,6 +56,7 @@ public class ParseResults {
 	private List<Match> _matches;
 	protected ParseError _error;
 	private HashSet<Listener> _listeners= new HashSet<Listener>();
+	private HashSet<ParseError> _errors= new HashSet<ParseError>();
 
 	public ParseResults(ParseContext ctx, Parser parser, int position) {
 		_ctx= ctx;
@@ -152,6 +153,13 @@ public class ParseResults {
 		}
 	}
 	public void setError(ParseError error) {
+		// in order to avoid infinite recursion when a Parser is recursive, 
+		// we have to check to see if we've seen this error before.
+		// f we've seen it before then ignore it.
+		if (_errors.contains(error))
+			return;
+		_errors.add(error);
+		
 		// just save the error.
 		// if no matches are found then the error will be send to listeners
 		saveError(error);
@@ -160,7 +168,8 @@ public class ParseResults {
 		}
 	}
 	protected void saveError(ParseError error) {
-		if (_error == null || error.position < _error.position) 
+		//if (_error == null || error.position < _error.position) 
+		if (_error == null || _error.position < error.position) 
 			_error= error;
 	}
 	
