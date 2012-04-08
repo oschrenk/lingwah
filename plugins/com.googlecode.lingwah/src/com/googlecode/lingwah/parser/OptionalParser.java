@@ -42,8 +42,7 @@ public class OptionalParser extends Parser {
 			
 			@Override
 			public void onMatchError(ParseResults results, ParseError parseError) {
-				// ignore
-			}
+				targetResults.setError(parseError);			}
 		});
 	}
 }

@@ -19,6 +19,7 @@ public class ParseError extends Error {
 	public final Parser parser;
 	
 	public ParseError(Parser parser, String msg, int position) {
+		super(msg);
 		this.parser= parser;
 		this.errorMsg= msg;
 		this.position= position;

@@ -12,7 +12,7 @@
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/pde-junit"/>
 <booleanAttribute key="default" value="false"/>
-<stringAttribute key="deselected_workspace_plugins" value="com.googlecode.lingwah.eclipse.ui,com.googlecode.lohr.engine.runtime,com.googlecode.lohr.library.apache.commons.cli,com.googlecode.lohr.notation,com.googlecode.lohr.notation.generator,com.googlecode.lohr.notation.tests,com.googlecode.lohr.notation.ui,com.googlecode.lohr.tools,com.googlecode.lohr.tools.test,com.googlecode.lohr.utils,org.xtext.example.mydsl,org.xtext.example.mydsl.tests,org.xtext.example.mydsl.ui"/>
+<stringAttribute key="deselected_workspace_plugins" value="com.googlecode.lingwah.eclipse.ui,com.googlecode.lohr.engine.runtime,com.googlecode.lohr.library.apache.commons.cli,com.googlecode.lohr.tools,com.googlecode.lohr.tools.test,com.googlecode.lohr.utils,org.xtext.example.mydsl,org.xtext.example.mydsl.tests,org.xtext.example.mydsl.ui"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../junit-workspace"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">

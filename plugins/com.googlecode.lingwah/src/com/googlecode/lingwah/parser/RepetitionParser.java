@@ -60,9 +60,7 @@ public final class RepetitionParser extends Parser
 
 			@Override
 			public void onMatchError(ParseResults results, ParseError parseError) {
-				if (_previousMatch == null) {
-					targetResults.setError(parseError);
-				}
+				targetResults.setError(parseError);
 			}
 		};
 		
