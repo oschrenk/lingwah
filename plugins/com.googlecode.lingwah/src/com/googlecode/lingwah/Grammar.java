@@ -45,6 +45,22 @@ public class Grammar {
 	final protected StringParser str(final char c) {
 		return string(c);
 	}
+	
+	protected StringParser istring(final String string) {
+		return Parsers.istring(string);
+	}
+
+	final protected StringParser istr(final String string) {
+		return istring(string);
+	}
+
+	protected StringParser istring(final char c) {
+		return Parsers.istring(c);
+	}
+
+	final protected StringParser istr(final char c) {
+		return istring(c);
+	}
 
 	protected Parser range(final char from, final char to) {
 		return Parsers.range(from, to);

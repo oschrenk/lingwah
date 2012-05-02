@@ -24,7 +24,7 @@ public final class Parsers
 
 	public static StringParser string(final String string)
 	{
-		return new StringParser(string);
+		return new StringParser(string, false/*case sensitive*/);
 	}
 	public static final StringParser str(final String string)
 	{
@@ -37,6 +37,23 @@ public final class Parsers
 	public static final StringParser str(final char c)
 	{
 		return string(""+c);
+	}
+	// case insensitive match
+	public static StringParser istring(final String string)
+	{
+		return new StringParser(string, true/*case insensitive*/);
+	}
+	public static final StringParser istr(final String string)
+	{
+		return istring(string);
+	}
+	public static final StringParser istring(final char c)
+	{
+		return istring(""+c);
+	}
+	public static final StringParser istr(final char c)
+	{
+		return istring(""+c);
 	}
 
 	public static Parser range(final char from, final char to)

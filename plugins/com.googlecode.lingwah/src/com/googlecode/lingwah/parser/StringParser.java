@@ -11,10 +11,12 @@ import com.googlecode.lingwah.ParseResults;
 public final class StringParser extends TerminalParser
 {
 	private final String _target;
+	private final boolean _insensitive;
 
-	public StringParser(String target)
+	public StringParser(String target, boolean insensitive)
 	{
 		_target= target;
+		_insensitive= insensitive;
 	}
 	
 	@Override
@@ -32,8 +34,19 @@ public final class StringParser extends TerminalParser
 		int i= 0;
 		int l= _target.length();
 		int e= input.length();
-		while (i < l && (start+i) < e && input.charAt(start + i) == _target.charAt(i))
+		while (i < l && (start+i) < e) {
+			char c= _target.charAt(i);
+			if (input.charAt(start + i) == c) {
+				// fall through
+			}
+			else if (_insensitive && (c == Character.toLowerCase(c) || c == Character.toUpperCase(c))) {
+				// fall through
+			}
+			else
+				break;
+			
 			i++;
+		}
 		if (i == l) { 
 			parseResults.addMatch(start + l);
 		}
