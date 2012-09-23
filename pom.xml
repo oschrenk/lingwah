@@ -66,4 +66,11 @@
 
 	</dependencies>
 
+	<distributionManagement>
+		<repository>
+			<id>gh-pages</id>
+			<url>file:///${basedir}/../lingwah-pages/repository/</url>
+	  </repository>
+	</distributionManagement>
+
 </project>
