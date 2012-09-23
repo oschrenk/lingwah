@@ -95,7 +95,6 @@ abstract public class AbstractProcessor implements MatchProcessor {
 	 * If there is no result and the Match has not yet been processed
 	 * then the Match will be processed before returning.
 	 */
-	@SuppressWarnings("unchecked")
 	public Object getResult(final Match match) {
 		Object result= _results.get(match);
 		if (result == null && !_visited.contains(match)) {
